@@ -1147,6 +1147,8 @@ static void Vdp2DrawLineScreen(void)
    else
       scrAddr = (Vdp2Regs->LCTA.all & 0x3FFFF) << 1;
 
+   int alpha = (Vdp2Regs->CCRLB & 0x1f) << 1;
+
    if (Vdp2Regs->LCTA.part.U & 0x8000)
    {
       /* per line */
@@ -1156,7 +1158,7 @@ static void Vdp2DrawLineScreen(void)
          dot = Vdp2ColorRamGetColor(color);
          scrAddr += 2;
 
-         TitanPutLineHLine(1, i, COLSAT2YAB32(0x3F, dot));
+         TitanPutLineHLine(1, i, COLSAT2YAB32(alpha, dot));
       }
    }
    else
@@ -1165,7 +1167,7 @@ static void Vdp2DrawLineScreen(void)
       color = T1ReadWord(Vdp2Ram, scrAddr) & 0x7FF;
       dot = Vdp2ColorRamGetColor(color);
       for (i = 0; i < vdp2height; i++)
-         TitanPutLineHLine(1, i, COLSAT2YAB32(0x3F, dot));
+         TitanPutLineHLine(1, i, COLSAT2YAB32(alpha, dot));
    }
 }
 
@@ -2096,6 +2098,19 @@ static void putpixel(int x, int y) {
 			x < vdp1clipxend &&
 			y >= vdp1clipystart &&
 			y < vdp1clipyend);
+
+      //vdp1_clip_test in yabauseut
+      if ((cmd.CMDPMOD >> 9) & 0x3 == 0x3)//outside clipping mode
+      {
+         //don't display inside the box
+         if (Vdp1Regs->userclipX1 <= x && 
+            x <= Vdp1Regs->userclipX2 && 
+            Vdp1Regs->userclipY1 <= y && 
+            y <= Vdp1Regs->userclipY2) 
+         {
+            clipped = 1;
+         }
+      }
 
 		if (cmd.CMDPMOD & 0x0400) PopUserClipping();
 
