@@ -22,14 +22,13 @@ if (NOT CMAKE_CURRENT_SOURCE_DIR STREQUAL CMAKE_CURRENT_BINARY_DIR)
 		project.properties
 		jni/yui.c
 		jni/miniegl.h
+		jni/osdcore.c
+		jni/osdcore.h
 		jni/sndaudiotrack.c
 		jni/sndaudiotrack.h
-    jni/osdcore.c
-    jni/osdcore.h
-    jni/sndaudiotrack.h
-    jni/sndopensl.c
-    jni/sndopensl.h
-    src/org/yabause/android/Cartridge.java
+		jni/sndopensl.c
+		jni/sndopensl.h
+		src/org/yabause/android/Cartridge.java
 		src/org/yabause/android/GameList.java
 		src/org/yabause/android/GameListAdapter.java
 		src/org/yabause/android/Home.java
@@ -61,6 +60,12 @@ if (NOT CMAKE_CURRENT_SOURCE_DIR STREQUAL CMAKE_CURRENT_BINARY_DIR)
 			DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/${item}"
 		)
 	endforeach()
+endif()
+
+set(YABAUSE_JNI_SRC "sndaudiotrack.c")
+if (YAB_WANT_OPENSL)
+    set(YABAUSE_JNI_SRC "${YABAUSE_JNI_SRC} sndopensl.c")
+    set(YABAUSE_JNI_LIB "-lOpenSLES")
 endif()
 
 set(YABAUSE_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/.. ${CMAKE_CURRENT_SOURCE_DIR}/../nanovg")
