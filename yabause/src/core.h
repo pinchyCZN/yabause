@@ -109,7 +109,7 @@ typedef signed long s64;
 #elif defined(_MSC_VER)
 typedef unsigned long u32;
 typedef unsigned __int64 u64;
-typedef unsigned long long u64;
+//typedef unsigned long long u64;
 #ifdef _WIN64
 typedef __int64 pointer;
 #else
@@ -118,7 +118,7 @@ typedef unsigned long pointer;
 
 typedef signed long s32;
 typedef __int64 s64;
-typedef signed long long s64;
+//typedef signed long long s64;
 
 #else
 // 32-bit Linux GCC/MINGW/etc.
@@ -200,7 +200,7 @@ static INLINE int StateCheckRetrieveHeader(FILE *fp, const char *name, int *vers
       s += strlen(s); \
    }
 #else
-#define AddString(s, r...) \
+#define AddString(s, r) \
    { \
       sprintf(s, ## r); \
       s += strlen(s); \

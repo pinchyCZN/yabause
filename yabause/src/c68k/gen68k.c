@@ -3817,4 +3817,9 @@ int main(void)
 
 	return 0;
 }
+int WINAPI WinMain(HINSTANCE hInstance,HINSTANCE hPrevInstance,LPSTR lpCmdLine,int nCmdShow )
+{
+	main();
+}
+
 #endif

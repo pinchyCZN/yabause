@@ -50,45 +50,45 @@ void LogStop(void);
 void LogChangeOutput(DebugOutType t, char * s);
 
 #ifdef DEBUG
-#define LOG(...) DebugPrintf(MainLog, __FILE__, __LINE__, __VA_ARGS__)
+#define LOG(r) DebugPrintf(MainLog, __FILE__, __LINE__, __VA_ARGS__)
 #else
-#define LOG(...)
+#define LOG
 #endif
 
 #ifdef CDDEBUG
 #define CDLOG(...) DebugPrintf(MainLog, __FILE__, __LINE__, __VA_ARGS__)
 #else
-#define CDLOG(...)
+#define CDLOG
 #endif
 
 #ifdef NETLINK_DEBUG
 #define NETLINK_LOG(...) DebugPrintf(MainLog, __FILE__, __LINE__, __VA_ARGS__)
 #else
-#define NETLINK_LOG(...)
+#define NETLINK_LOG()
 #endif
 
 #ifdef SCSP_DEBUG
 #define SCSPLOG(...) DebugPrintf(MainLog, __FILE__, __LINE__, __VA_ARGS__)
 #else
-#define SCSPLOG(...)
+#define SCSPLOG
 #endif
 
 #ifdef VDP1_DEBUG
 #define VDP1LOG(...) DebugPrintf(MainLog, __FILE__, __LINE__, __VA_ARGS__)
 #else
-#define VDP1LOG(...)
+#define VDP1LOG
 #endif
 
 #ifdef VDP2_DEBUG
 #define VDP2LOG(...) DebugPrintf(MainLog, __FILE__, __LINE__, __VA_ARGS__)
 #else
-#define VDP2LOG(...)
+#define VDP2LOG
 #endif
 
 #ifdef SMPC_DEBUG
 #define SMPCLOG(...) DebugPrintf(MainLog, __FILE__, __LINE__, __VA_ARGS__)
 #else
-#define SMPCLOG(...)
+#define SMPCLOG
 #endif
 
 #endif
