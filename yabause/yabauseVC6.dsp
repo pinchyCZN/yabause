@@ -138,22 +138,6 @@ SOURCE=.\src\bios.c
 # End Source File
 # Begin Source File
 
-SOURCE=".\src\cd-freebsd.c"
-# End Source File
-# Begin Source File
-
-SOURCE=".\src\cd-linux.c"
-# End Source File
-# Begin Source File
-
-SOURCE=".\src\cd-macosx.c"
-# End Source File
-# Begin Source File
-
-SOURCE=".\src\cd-netbsd.c"
-# End Source File
-# Begin Source File
-
 SOURCE=".\src\cd-windows.c"
 # End Source File
 # Begin Source File
@@ -207,10 +191,6 @@ SOURCE=.\src\m68kd.c
 # Begin Source File
 
 SOURCE=.\src\m68kq68.c
-# End Source File
-# Begin Source File
-
-SOURCE=.\src\macjoy.c
 # End Source File
 # Begin Source File
 
