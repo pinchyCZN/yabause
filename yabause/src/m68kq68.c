@@ -96,38 +96,38 @@ static void writew_trampoline(uint32_t address, uint32_t data);
 /* Module interface definition */
 
 M68K_struct M68KQ68 = {
-    .id          = M68KCORE_Q68,
-    .Name        = "Q68 68k Emulator Interface",
+	M68KCORE_Q68,
+	"Q68 68k Emulator Interface",
 
-    .Init        = m68kq68_init,
-    .DeInit      = m68kq68_deinit,
-    .Reset       = m68kq68_reset,
+	m68kq68_init,
+	m68kq68_deinit,
+	m68kq68_reset,
 
-    .Exec        = m68kq68_exec,
-    .Sync        = m68kq68_sync,
+	m68kq68_exec,
+	m68kq68_sync,
 
-    .GetDReg     = m68kq68_get_dreg,
-    .GetAReg     = m68kq68_get_areg,
-    .GetPC       = m68kq68_get_pc,
-    .GetSR       = m68kq68_get_sr,
-    .GetUSP      = m68kq68_get_usp,
-    .GetMSP      = m68kq68_get_ssp,
+	m68kq68_get_dreg,
+	m68kq68_get_areg,
+	m68kq68_get_pc,
+	m68kq68_get_sr,
+	m68kq68_get_usp,
+	m68kq68_get_ssp,
 
-    .SetDReg     = m68kq68_set_dreg,
-    .SetAReg     = m68kq68_set_areg,
-    .SetPC       = m68kq68_set_pc,
-    .SetSR       = m68kq68_set_sr,
-    .SetUSP      = m68kq68_set_usp,
-    .SetMSP      = m68kq68_set_ssp,
+	m68kq68_set_dreg,
+	m68kq68_set_areg,
+	m68kq68_set_pc,
+	m68kq68_set_sr,
+	m68kq68_set_usp,
+	m68kq68_set_ssp,
 
-    .SetIRQ      = m68kq68_set_irq,
-    .WriteNotify = m68kq68_write_notify,
+	m68kq68_set_fetch,
+	m68kq68_set_irq,
+	m68kq68_write_notify,
 
-    .SetFetch    = m68kq68_set_fetch,
-    .SetReadB    = m68kq68_set_readb,
-    .SetReadW    = m68kq68_set_readw,
-    .SetWriteB   = m68kq68_set_writeb,
-    .SetWriteW   = m68kq68_set_writew,
+	m68kq68_set_readb,
+	m68kq68_set_readw,
+	m68kq68_set_writeb,
+	m68kq68_set_writew,
 };
 
 /*-----------------------------------------------------------------------*/

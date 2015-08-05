@@ -44,8 +44,8 @@
 
 /*----------------------------------*/
 
-static const u64 trace_start =  000000000ULL;  // First cycle to trace
-static const u64 trace_stop  = 2800000000ULL;  // Last cycle to trace + 1
+static const u64 trace_start =  000000000;  // First cycle to trace
+static const u64 trace_stop  = 2800000000;  // Last cycle to trace + 1
 
 /*----------------------------------*/
 
@@ -240,11 +240,11 @@ FASTCALL void sh2_trace(SH2_struct *state, u32 address)
         SH2Disasm(address, opcode, 0, buf);
         fprintf(logfile, "[%c] %08X: %04X  %-44s [%12llu]\n",
                 state==SSH2 ? 'S' : 'M', (int)address, (int)opcode, buf+12,
-                (unsigned long long)current_cycles);
+                current_cycles);
 #ifdef ECHO_TO_STDERR
         fprintf(stderr, "[%c] %08X: %04X  %-44s [%12llu]\n",
                 state==SSH2 ? 'S' : 'M', (int)address, (int)opcode, buf+12,
-                (unsigned long long)current_cycles);
+                current_cycles);
 #endif
 
         for (i = 0; i < 16; i++) {

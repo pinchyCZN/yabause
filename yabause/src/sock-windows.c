@@ -33,6 +33,19 @@
 #include <winsock2.h>
 #include <ws2tcpip.h>
 
+#ifndef	_GNU_H_WINDOWS32_SOCKETS
+	typedef struct addrinfo {
+	  int             ai_flags;
+	  int             ai_family;
+	  int             ai_socktype;
+	  int             ai_protocol;
+	  size_t          ai_addrlen;
+	  char            *ai_canonname;
+	  struct sockaddr  *ai_addr;
+	  struct addrinfo  *ai_next;
+	} ADDRINFOA, *PADDRINFOA;
+#endif
+
 static fd_set read_fds;
 static fd_set write_fds;
 

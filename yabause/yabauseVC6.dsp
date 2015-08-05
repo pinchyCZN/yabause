@@ -65,6 +65,7 @@ LINK32=link.exe
 # PROP Use_Debug_Libraries 1
 # PROP Output_Dir "Debug"
 # PROP Intermediate_Dir "Debug"
+# PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /YX /FD /GZ /c
 # ADD CPP /nologo /W3 /Gm /GX /ZI /Od /I "." /FI"pragma.h" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /FR /YX /FD /GZ /c
@@ -211,18 +212,19 @@ SOURCE=.\src\osdcore.c
 # Begin Source File
 
 SOURCE=.\src\perdx.c
+
+!IF  "$(CFG)" == "yabauseVC6 - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "yabauseVC6 - Win32 Debug"
+
+# PROP Exclude_From_Build 1
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=.\src\peripheral.c
-# End Source File
-# Begin Source File
-
-SOURCE=.\src\perlinuxjoy.c
-# End Source File
-# Begin Source File
-
-SOURCE=.\src\permacjoy.c
 # End Source File
 # Begin Source File
 
@@ -234,15 +236,20 @@ SOURCE=.\src\profile.c
 # End Source File
 # Begin Source File
 
-SOURCE=".\src\scr-x.c"
-# End Source File
-# Begin Source File
-
 SOURCE=.\src\scsp.c
 # End Source File
 # Begin Source File
 
 SOURCE=.\src\scsp2.c
+
+!IF  "$(CFG)" == "yabauseVC6 - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "yabauseVC6 - Win32 Debug"
+
+# PROP Exclude_From_Build 1
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
@@ -287,10 +294,15 @@ SOURCE=.\src\snddummy.c
 # Begin Source File
 
 SOURCE=.\src\snddx.c
-# End Source File
-# Begin Source File
 
-SOURCE=.\src\sndmac.c
+!IF  "$(CFG)" == "yabauseVC6 - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "yabauseVC6 - Win32 Debug"
+
+# PROP Exclude_From_Build 1
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
@@ -306,23 +318,11 @@ SOURCE=".\src\sock-dummy.c"
 # End Source File
 # Begin Source File
 
-SOURCE=".\src\sock-linux.c"
-# End Source File
-# Begin Source File
-
 SOURCE=".\src\sock-windows.c"
 # End Source File
 # Begin Source File
 
 SOURCE=".\src\thr-dummy.c"
-# End Source File
-# Begin Source File
-
-SOURCE=".\src\thr-linux.c"
-# End Source File
-# Begin Source File
-
-SOURCE=".\src\thr-macosx.c"
 # End Source File
 # Begin Source File
 
