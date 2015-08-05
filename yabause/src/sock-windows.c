@@ -49,14 +49,26 @@
 static fd_set read_fds;
 static fd_set write_fds;
 
+typedef int  (WSAAPI * getaddrinfo_ptr_t)  (const char *, const char* , const struct addrinfo *, struct addrinfo **);
+typedef void (WSAAPI * freeaddrinfo_ptr_t) (struct addrinfo*);
+getaddrinfo_ptr_t getaddrinfo_ptr;
+freeaddrinfo_ptr_t freeaddrinfo_ptr;
+
 //////////////////////////////////////////////////////////////////////////////
 
 int YabSockInit()
 {
    WSADATA wsaData;
+	HMODULE hWsock;
 
    if (WSAStartup(MAKEWORD(2,2), &wsaData) != 0)
       return -1;
+
+   hWsock = LoadLibraryA("ws2_32");
+	if(hWsock){
+		getaddrinfo_ptr = (getaddrinfo_ptr_t)GetProcAddress(hWsock, "getaddrinfo");
+		freeaddrinfo_ptr = (freeaddrinfo_ptr_t)GetProcAddress(hWsock, "freeaddrinfo");
+	}
 
    return 0;
 }

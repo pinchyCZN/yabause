@@ -107,7 +107,8 @@ void YabThreadWait(unsigned int id)
 
 void YabThreadYield(void) 
 {
-   SwitchToThread();
+   //SwitchToThread();
+   Sleep(0);
 }
 
 void YabThreadSleep(void) 

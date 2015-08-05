@@ -223,7 +223,8 @@ DWORD WINAPI __stdcall SPTICDThread(void *b)
 		}
 
 		LeaveCriticalSection(&cd_cs);
-		SwitchToThread();
+		Sleep(0);
+		//SwitchToThread();
 	}
 	return 0;
 }
@@ -335,7 +336,8 @@ int SPTICDReadSectorFAD(u32 FAD, void *buffer) {
 			}
 		}
 		LeaveCriticalSection(&cd_cs);
-		SwitchToThread();
+		Sleep(0);
+		//SwitchToThread();
 	}
 }
 
