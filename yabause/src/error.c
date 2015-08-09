@@ -124,7 +124,7 @@ void YabErrorMsg(const char * format, ...) {
     char * buffer;
 
     va_start(l, format);
-    n = vsnprintf(NULL, 0, format, l);
+    n = _vsnprintf(NULL, 0, format, l);
     va_end(l);
 
     buffer = malloc(n + 1);
