@@ -78,7 +78,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:windows /debug /machine:I386 /pdbtype:sept
-# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib  Ws2_32.lib /nologo /subsystem:windows /debug /machine:I386 /pdbtype:sept
+# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib Ws2_32.lib /nologo /subsystem:windows /debug /machine:I386 /pdbtype:sept
 
 !ENDIF 
 
@@ -131,6 +131,22 @@ SOURCE=.\src\c68k\gen68k.c
 
 !ENDIF 
 
+# End Source File
+# End Group
+# Begin Group "win32"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=.\src\win32\main.c
+# End Source File
+# End Group
+# Begin Group "titan"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=.\src\titan\titan.c
 # End Source File
 # End Group
 # Begin Source File
@@ -192,6 +208,15 @@ SOURCE=.\src\m68kd.c
 # Begin Source File
 
 SOURCE=.\src\m68kq68.c
+
+!IF  "$(CFG)" == "yabauseVC6 - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "yabauseVC6 - Win32 Debug"
+
+# PROP Exclude_From_Build 1
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
