@@ -261,6 +261,10 @@ SOURCE=.\src\profile.c
 # End Source File
 # Begin Source File
 
+SOURCE=.\resource.rc
+# End Source File
+# Begin Source File
+
 SOURCE=.\src\scsp.c
 # End Source File
 # Begin Source File

@@ -1,3 +1,5 @@
+#include "resource.h"
+
 #define CHAR_BIT 8
 unsigned short _byteswap_ushort(unsigned short value) 
 { 
@@ -55,7 +57,30 @@ int vc6_load_freeaddrinfo()
 	return 0;
 }
 
+
+
+LRESULT CALLBACK dialogproc( HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam )
+{
+	switch(msg){
+	case WM_INITDIALOG:
+		test_init();
+		break;
+	case WM_COMMAND:
+		switch(LOWORD(wparam)){
+		case IDC_INITEMU:
+			break;
+		case IDOK:
+		case IDCANCEL:
+			EndDialog(hwnd,0);
+			break;
+		}
+		break;
+
+	}
+	return 0;
+}
 int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
 				   LPSTR lpCmdLine, int nCmdShow )
 {
+	DialogBoxParam(hInstance,(LPCTSTR)IDD_MAINDLG,NULL,dialogproc,0);
 }

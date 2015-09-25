@@ -79,3 +79,9 @@ NULL
 void YuiSwapBuffers()
 {
 }
+
+yabauseinit_struct mYabauseConf;
+int test_init()
+{
+	YabauseInit(&mYabauseConf);
+}
