@@ -6,9 +6,10 @@
 #include "..\scsp.h"
 #include "..\vdp1.h"
 #include "..\vidsoft.h"
+#include "..\cs0.h"
 
 
-extern CDInterface SPTICD;
+extern CDInterface ISOCD;
 
 M68K_struct * M68KCoreList[] = {
 &M68KDummy,
@@ -83,5 +84,24 @@ void YuiSwapBuffers()
 yabauseinit_struct mYabauseConf;
 int test_init()
 {
+	memset(&mYabauseConf,0,sizeof(mYabauseConf));
+	mYabauseConf.m68kcoretype = M68KCORE_C68K;
+	mYabauseConf.percoretype = PERCORE_DUMMY;
+	mYabauseConf.sh2coretype = SH2CORE_DEFAULT;
+	mYabauseConf.vidcoretype = VIDCORE_SOFT;
+	mYabauseConf.sndcoretype = SNDCORE_DUMMY;
+	mYabauseConf.cdcoretype = CDCORE_ISO;
+	mYabauseConf.carttype = CART_NONE;
+	mYabauseConf.regionid = 0;
+	mYabauseConf.biospath = 0;
+	mYabauseConf.cdpath = 0;
+	mYabauseConf.buppath = 0;
+	mYabauseConf.mpegpath = 0;
+	mYabauseConf.cartpath = 0;
+	mYabauseConf.videoformattype = VIDEOFORMATTYPE_NTSC;
+
+	mYabauseConf.cdpath="C:\\EMU\\games\\RS\\023 Radiant Silvergun (J).cue";
 	YabauseInit(&mYabauseConf);
+	//YabauseEmulate();
+	YabauseExec();
 }
