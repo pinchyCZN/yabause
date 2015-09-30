@@ -140,6 +140,10 @@ SOURCE=.\src\c68k\gen68k.c
 
 SOURCE=.\src\win32\main.c
 # End Source File
+# Begin Source File
+
+SOURCE=.\src\win32\resize.c
+# End Source File
 # End Group
 # Begin Group "titan"
 

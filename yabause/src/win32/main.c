@@ -102,6 +102,12 @@ int test_init()
 
 	mYabauseConf.cdpath="C:\\EMU\\games\\RS\\023 Radiant Silvergun (J).cue";
 	YabauseInit(&mYabauseConf);
+	return 0;
+}
+
+int tick_emu()
+{
 	//YabauseEmulate();
 	YabauseExec();
+	return 0;
 }
