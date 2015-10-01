@@ -138,6 +138,10 @@ SOURCE=..\c68k\gen68k.c
 # PROP Default_Filter ""
 # Begin Source File
 
+SOURCE=.\input.c
+# End Source File
+# Begin Source File
+
 SOURCE=main.c
 # End Source File
 # Begin Source File
