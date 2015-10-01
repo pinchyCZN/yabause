@@ -1,0 +1,7 @@
+.gitignore
+Debug/
+*.aps
+*.ncb
+*.opt
+*.plg
+
