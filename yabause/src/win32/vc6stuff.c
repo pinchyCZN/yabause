@@ -66,7 +66,7 @@ int draw_fbuffer(HDC hdc,RECT *rect)
 	BITMAPINFOHEADER bmi;
 	if(hdc==0)
 		return 0;
-	memset(&bmi,0,sizeof(BITMAPINFO));
+	memset(&bmi,0,sizeof(BITMAPINFOHEADER));
 	bmi.biBitCount=32;
 	bmi.biWidth=704;
 	bmi.biHeight=512;
@@ -91,6 +91,7 @@ int draw_fbuffer(HDC hdc,RECT *rect)
 			dispbuffer,
 			(BITMAPINFO*)&bmi,DIB_RGB_COLORS);
 		*/
+		
 		StretchDIBits(hdc,
 			0,0, //x,y destination
 			w,h, //w,h destination

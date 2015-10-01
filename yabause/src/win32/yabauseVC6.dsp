@@ -94,40 +94,40 @@ LINK32=link.exe
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=.\src\c68k\c68k.c
+SOURCE=..\c68k\c68k.c
 
 !IF  "$(CFG)" == "yabauseVC6 - Win32 Release"
 
 !ELSEIF  "$(CFG)" == "yabauseVC6 - Win32 Debug"
 
-# ADD CPP /MTd /I ".\src\c68k\inc" /D "C68K_NO_JUMP_TABLE"
+# ADD CPP /MTd /I "..\c68k\inc" /D "C68K_NO_JUMP_TABLE"
 
 !ENDIF 
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\src\c68k\c68kexec.c
+SOURCE=..\c68k\c68kexec.c
 
 !IF  "$(CFG)" == "yabauseVC6 - Win32 Release"
 
 !ELSEIF  "$(CFG)" == "yabauseVC6 - Win32 Debug"
 
-# ADD CPP /MTd /I ".\src\c68k\inc" /D "C68K_NO_JUMP_TABLE"
+# ADD CPP /MTd /I "..\c68k\inc" /D "C68K_NO_JUMP_TABLE"
 
 !ENDIF 
 
 # End Source File
 # Begin Source File
 
-SOURCE=.\src\c68k\gen68k.c
+SOURCE=..\c68k\gen68k.c
 
 !IF  "$(CFG)" == "yabauseVC6 - Win32 Release"
 
 !ELSEIF  "$(CFG)" == "yabauseVC6 - Win32 Debug"
 
 # PROP Exclude_From_Build 1
-# ADD CPP /MTd /I ".\src\c68k\inc" /D "C68K_GEN" /D "__WIN32__" /D "C68K_NO_JUMP_TABLE"
+# ADD CPP /MTd /I "..\c68k\inc" /D "C68K_GEN" /D "__WIN32__" /D "C68K_NO_JUMP_TABLE"
 
 !ENDIF 
 
@@ -138,11 +138,11 @@ SOURCE=.\src\c68k\gen68k.c
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=.\src\win32\main.c
+SOURCE=main.c
 # End Source File
 # Begin Source File
 
-SOURCE=.\src\win32\resize.c
+SOURCE=resize.c
 # End Source File
 # End Group
 # Begin Group "titan"
@@ -150,68 +150,68 @@ SOURCE=.\src\win32\resize.c
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=.\src\titan\titan.c
+SOURCE=..\titan\titan.c
 # End Source File
 # End Group
 # Begin Source File
 
-SOURCE=.\src\bios.c
+SOURCE=..\bios.c
 # End Source File
 # Begin Source File
 
-SOURCE=".\src\cd-windows.c"
+SOURCE="..\cd-windows.c"
 # End Source File
 # Begin Source File
 
-SOURCE=.\src\cdbase.c
+SOURCE=..\cdbase.c
 # End Source File
 # Begin Source File
 
-SOURCE=.\src\cheat.c
+SOURCE=..\cheat.c
 # End Source File
 # Begin Source File
 
-SOURCE=.\src\coffelf.c
+SOURCE=..\coffelf.c
 # End Source File
 # Begin Source File
 
-SOURCE=.\src\cs0.c
+SOURCE=..\cs0.c
 # End Source File
 # Begin Source File
 
-SOURCE=.\src\cs1.c
+SOURCE=..\cs1.c
 # End Source File
 # Begin Source File
 
-SOURCE=.\src\cs2.c
+SOURCE=..\cs2.c
 # End Source File
 # Begin Source File
 
-SOURCE=.\src\debug.c
+SOURCE=..\debug.c
 # End Source File
 # Begin Source File
 
-SOURCE=.\src\error.c
+SOURCE=..\error.c
 # End Source File
 # Begin Source File
 
-SOURCE=.\src\japmodem.c
+SOURCE=..\japmodem.c
 # End Source File
 # Begin Source File
 
-SOURCE=.\src\m68kc68k.c
+SOURCE=..\m68kc68k.c
 # End Source File
 # Begin Source File
 
-SOURCE=.\src\m68kcore.c
+SOURCE=..\m68kcore.c
 # End Source File
 # Begin Source File
 
-SOURCE=.\src\m68kd.c
+SOURCE=..\m68kd.c
 # End Source File
 # Begin Source File
 
-SOURCE=.\src\m68kq68.c
+SOURCE=..\m68kq68.c
 
 !IF  "$(CFG)" == "yabauseVC6 - Win32 Release"
 
@@ -224,23 +224,23 @@ SOURCE=.\src\m68kq68.c
 # End Source File
 # Begin Source File
 
-SOURCE=.\src\memory.c
+SOURCE=..\memory.c
 # End Source File
 # Begin Source File
 
-SOURCE=.\src\movie.c
+SOURCE=..\movie.c
 # End Source File
 # Begin Source File
 
-SOURCE=.\src\netlink.c
+SOURCE=..\netlink.c
 # End Source File
 # Begin Source File
 
-SOURCE=.\src\osdcore.c
+SOURCE=..\osdcore.c
 # End Source File
 # Begin Source File
 
-SOURCE=.\src\perdx.c
+SOURCE=..\perdx.c
 
 !IF  "$(CFG)" == "yabauseVC6 - Win32 Release"
 
@@ -253,15 +253,15 @@ SOURCE=.\src\perdx.c
 # End Source File
 # Begin Source File
 
-SOURCE=.\src\peripheral.c
+SOURCE=..\peripheral.c
 # End Source File
 # Begin Source File
 
-SOURCE=.\src\persdljoy.c
+SOURCE=..\persdljoy.c
 # End Source File
 # Begin Source File
 
-SOURCE=.\src\profile.c
+SOURCE=..\profile.c
 # End Source File
 # Begin Source File
 
@@ -269,11 +269,11 @@ SOURCE=.\resource.rc
 # End Source File
 # Begin Source File
 
-SOURCE=.\src\scsp.c
+SOURCE=..\scsp.c
 # End Source File
 # Begin Source File
 
-SOURCE=.\src\scsp2.c
+SOURCE=..\scsp2.c
 
 !IF  "$(CFG)" == "yabauseVC6 - Win32 Release"
 
@@ -286,47 +286,47 @@ SOURCE=.\src\scsp2.c
 # End Source File
 # Begin Source File
 
-SOURCE=.\src\scu.c
+SOURCE=..\scu.c
 # End Source File
 # Begin Source File
 
-SOURCE=.\src\sh2core.c
+SOURCE=..\sh2core.c
 # End Source File
 # Begin Source File
 
-SOURCE=.\src\sh2d.c
+SOURCE=..\sh2d.c
 # End Source File
 # Begin Source File
 
-SOURCE=.\src\sh2iasm.c
+SOURCE=..\sh2iasm.c
 # End Source File
 # Begin Source File
 
-SOURCE=.\src\sh2idle.c
+SOURCE=..\sh2idle.c
 # End Source File
 # Begin Source File
 
-SOURCE=.\src\sh2int.c
+SOURCE=..\sh2int.c
 # End Source File
 # Begin Source File
 
-SOURCE=.\src\sh2trace.c
+SOURCE=..\sh2trace.c
 # End Source File
 # Begin Source File
 
-SOURCE=.\src\smpc.c
+SOURCE=..\smpc.c
 # End Source File
 # Begin Source File
 
-SOURCE=.\src\sndal.c
+SOURCE=..\sndal.c
 # End Source File
 # Begin Source File
 
-SOURCE=.\src\snddummy.c
+SOURCE=..\snddummy.c
 # End Source File
 # Begin Source File
 
-SOURCE=.\src\snddx.c
+SOURCE=..\snddx.c
 
 !IF  "$(CFG)" == "yabauseVC6 - Win32 Release"
 
@@ -339,15 +339,15 @@ SOURCE=.\src\snddx.c
 # End Source File
 # Begin Source File
 
-SOURCE=.\src\sndsdl.c
+SOURCE=..\sndsdl.c
 # End Source File
 # Begin Source File
 
-SOURCE=.\src\sndwav.c
+SOURCE=..\sndwav.c
 # End Source File
 # Begin Source File
 
-SOURCE=".\src\sock-dummy.c"
+SOURCE="..\sock-dummy.c"
 
 !IF  "$(CFG)" == "yabauseVC6 - Win32 Release"
 
@@ -360,11 +360,11 @@ SOURCE=".\src\sock-dummy.c"
 # End Source File
 # Begin Source File
 
-SOURCE=".\src\sock-windows.c"
+SOURCE="..\sock-windows.c"
 # End Source File
 # Begin Source File
 
-SOURCE=".\src\thr-dummy.c"
+SOURCE="..\thr-dummy.c"
 
 !IF  "$(CFG)" == "yabauseVC6 - Win32 Release"
 
@@ -377,7 +377,7 @@ SOURCE=".\src\thr-dummy.c"
 # End Source File
 # Begin Source File
 
-SOURCE=".\src\thr-windows.c"
+SOURCE="..\thr-windows.c"
 # End Source File
 # Begin Source File
 
@@ -385,39 +385,39 @@ SOURCE=.\vc6stuff.c
 # End Source File
 # Begin Source File
 
-SOURCE=.\src\vdp1.c
+SOURCE=..\vdp1.c
 # End Source File
 # Begin Source File
 
-SOURCE=.\src\vdp2.c
+SOURCE=..\vdp2.c
 # End Source File
 # Begin Source File
 
-SOURCE=.\src\vdp2debug.c
+SOURCE=..\vdp2debug.c
 # End Source File
 # Begin Source File
 
-SOURCE=.\src\vidogl.c
+SOURCE=..\vidogl.c
 # End Source File
 # Begin Source File
 
-SOURCE=.\src\vidshared.c
+SOURCE=..\vidshared.c
 # End Source File
 # Begin Source File
 
-SOURCE=.\src\vidsoft.c
+SOURCE=..\vidsoft.c
 # End Source File
 # Begin Source File
 
-SOURCE=.\src\yabause.c
+SOURCE=..\yabause.c
 # End Source File
 # Begin Source File
 
-SOURCE=.\src\ygl.c
+SOURCE=..\ygl.c
 # End Source File
 # Begin Source File
 
-SOURCE=.\src\yglshader.c
+SOURCE=..\yglshader.c
 # End Source File
 # End Group
 # Begin Group "Header Files"
