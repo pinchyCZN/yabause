@@ -6,7 +6,6 @@
 #define IDD_DLG_CONTROLS                102
 #define IDR_MENU1                       103
 #define IDD_DEBUG_OPTIONS               104
-#define IDC_INITEMU                     1000
 #define IDC_STATUS                      1002
 #define IDC_SHOW_CONSOLE                1003
 #define IDC_ENABLE_DEBUGLOG             1004
@@ -19,21 +18,23 @@
 #define IDM_FILE_OPEN                   40001
 #define IDM_DEBUG_OPTIONS               40002
 #define IDM_SAVE_STATE1                 40004
-#define IDM_SAVE_STATE3                 40005
-#define IDM_SAVE_STATE5                 40006
-#define IDM_LOAD_STATE1                 40007
-#define IDM_LOAD_STATE2                 40008
-#define IDM_LOAD_STATE3                 40009
-#define IDM_LOAD_STATE4                 40010
-#define IDM_LOAD_STATE5                 40011
+#define IDM_SAVE_STATE2                 40005
+#define IDM_SAVE_STATE3                 40006
+#define IDM_SAVE_STATE4                 40007
+#define IDM_SAVE_STATE5                 40008
+#define IDM_LOAD_STATE1                 40009
+#define IDM_LOAD_STATE2                 40010
+#define IDM_LOAD_STATE3                 40011
+#define IDM_LOAD_STATE4                 40012
+#define IDM_LOAD_STATE5                 40013
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        105
-#define _APS_NEXT_COMMAND_VALUE         40012
-#define _APS_NEXT_CONTROL_VALUE         1005
+#define _APS_NEXT_COMMAND_VALUE         40014
+#define _APS_NEXT_CONTROL_VALUE         1011
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

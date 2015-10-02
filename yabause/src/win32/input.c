@@ -58,15 +58,10 @@ int PERWin32HandleEvents(void)
 }
 u32 PERWin32Scan(u32 flags)
 {
-int i;
-i++;
-return 0;
+	return 0;
 }
 void PERWin32Flush(void)
 {
-	int i;
-	i++;
-	return i;
 }
 void PERWin32KeyName(UNUSED u32 key,char *name,UNUSED int size)
 {

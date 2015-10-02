@@ -166,7 +166,9 @@ int render_thread()
 	if(thread1obj==0)
 		return 0;
 	while(TRUE){
-		DWORD result=WaitForSingleObject(thread1obj,INFINITE);
+		DWORD result;
+		pause_thread=0;
+		result=WaitForSingleObject(thread1obj,INFINITE);
 		if(WAIT_OBJECT_0==result){
 			while(TRUE){
 				thread_busy=1;
@@ -178,6 +180,20 @@ int render_thread()
 			thread_busy=0;
 		}
 	}
+}
+int wait_stop_emu_thread()
+{
+	DWORD delta,tick=GetTickCount();
+	while(TRUE){
+		pause_thread=1;
+		Sleep(1);
+		if(!thread_busy)
+			break;
+		delta=GetTickCount()-tick;
+		if(delta>1000)
+			break;
+	}
+	return 0;
 }
 int create_status_bar_parts(HWND hwnd,HWND hstatus)
 {
@@ -249,7 +265,6 @@ LRESULT CALLBACK debug_opt_dlg(HWND hwnd,UINT msg,WPARAM wparam,LPARAM lparam)
 	}
 	return 0;
 }
-
 LRESULT CALLBACK dialogproc(HWND hwnd,UINT msg,WPARAM wparam,LPARAM lparam)
 {
 	static int timer=0;
@@ -286,6 +301,24 @@ LRESULT CALLBACK dialogproc(HWND hwnd,UINT msg,WPARAM wparam,LPARAM lparam)
 			break;
 		case IDM_DEBUG_OPTIONS:
 			DialogBoxParam(ghinstance,MAKEINTRESOURCE(IDD_DEBUG_OPTIONS),hwnd,debug_opt_dlg,0);
+			break;
+		case IDM_SAVE_STATE1:
+		case IDM_SAVE_STATE2:
+		case IDM_SAVE_STATE3:
+		case IDM_SAVE_STATE4:
+		case IDM_SAVE_STATE5:
+			wait_stop_emu_thread();
+			YabSaveStateSlot("c:\\temp\\",LOWORD(wparam)-IDM_SAVE_STATE1);
+			SetEvent(thread1obj);
+			break;
+		case IDM_LOAD_STATE1:
+		case IDM_LOAD_STATE2:
+		case IDM_LOAD_STATE3:
+		case IDM_LOAD_STATE4:
+		case IDM_LOAD_STATE5:
+			wait_stop_emu_thread();
+			YabLoadStateSlot("c:\\temp\\",LOWORD(wparam)-IDM_LOAD_STATE1);
+			SetEvent(thread1obj);
 			break;
 		}
 		break;
