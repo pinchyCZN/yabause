@@ -58,9 +58,89 @@ STYLE WS_MINIMIZEBOX | WS_MAXIMIZEBOX | WS_POPUP | WS_CAPTION | WS_SYSMENU |
 CAPTION "Yabause"
 FONT 8, "MS Sans Serif"
 BEGIN
-    PUSHBUTTON      "Cancel",IDCANCEL,190,203,50,14
-    PUSHBUTTON      "INIT EMU",IDC_INITEMU,1,203,50,14
 END
+
+IDD_DLG_CONTROLS DIALOG DISCARDABLE  0, 0, 424, 278
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Dialog"
+FONT 8, "MS Sans Serif"
+BEGIN
+    PUSHBUTTON      "IDC_STATUS",IDC_STATUS,13,251,393,15
+END
+
+IDD_DEBUG_OPTIONS DIALOG DISCARDABLE  0, 0, 259, 166
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Debug Options"
+FONT 8, "MS Sans Serif"
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,0,152,50,14
+    CONTROL         "Show Console",IDC_SHOW_CONSOLE,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,16,12,61,10
+    CONTROL         "Enable DEBUG LOG",IDC_ENABLE_DEBUGLOG,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,16,28,82,10
+    CONTROL         "Enable CDDEBUG LOG",IDC_ENABLE_CDDEBUG_LOG,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,16,44,92,10
+    CONTROL         "Enable NETLINK LOG",IDC_ENABLE_NETLINK_LOG,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,16,60,87,10
+    CONTROL         "Enable SCSP LOG",IDC_ENABLE_SCSP_LOG,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,16,76,75,10
+    CONTROL         "Enable VDP1 LOG",IDC_ENABLE_VDP1_LOG,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,16,92,75,10
+    CONTROL         "Enable VDP2 LOG",IDC_ENABLE_VDP2_LOG,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,16,108,75,10
+    CONTROL         "Enable SMPC LOG",IDC_ENABLE_SMPC_LOG,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,16,124,77,10
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Menu
+//
+
+IDR_MENU1 MENU DISCARDABLE 
+BEGIN
+    POPUP "File"
+    BEGIN
+        MENUITEM "Open",                        IDM_FILE_OPEN
+        POPUP "Save state"
+        BEGIN
+            MENUITEM "Save state 1",                IDM_SAVE_STATE1
+            MENUITEM "Save state 2",                IDM_SAVE_STATE1
+            MENUITEM "Save state 3",                IDM_SAVE_STATE3
+            MENUITEM "Save state 4",                IDM_SAVE_STATE3
+            MENUITEM "Save state 5",                IDM_SAVE_STATE5
+        END
+        POPUP "Load State"
+        BEGIN
+            MENUITEM "Load state 1",                IDM_LOAD_STATE1
+            MENUITEM "Load state 2",                IDM_LOAD_STATE2
+            MENUITEM "Load state 3",                IDM_LOAD_STATE3
+            MENUITEM "Load state 4",                IDM_LOAD_STATE4
+            MENUITEM "Load state 5",                IDM_LOAD_STATE5
+        END
+    END
+    POPUP "Settings"
+    BEGIN
+        MENUITEM "Debug options",               IDM_DEBUG_OPTIONS
+    END
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO DISCARDABLE 
+BEGIN
+    IDD_DEBUG_OPTIONS, DIALOG
+    BEGIN
+        VERTGUIDE, 16
+    END
+END
+#endif    // APSTUDIO_INVOKED
 
 #endif    // English (U.S.) resources
 /////////////////////////////////////////////////////////////////////////////

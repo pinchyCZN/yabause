@@ -50,45 +50,73 @@ void LogStop(void);
 void LogChangeOutput(DebugOutType t, char * s);
 
 #ifdef DEBUG
-#define LOG(r) DebugPrintf(MainLog, __FILE__, __LINE__, __VA_ARGS__)
+#	if defined(_WIN32) && (_MSC_VER<=1200)
+#		define LOG DebugPrintfLOG
+#	else
+#		define LOG(...) DebugPrintf(MainLog, __FILE__, __LINE__, __VA_ARGS__)
+#	endif
 #else
-#define LOG
+#	define LOG
 #endif
 
 #ifdef CDDEBUG
-#define CDLOG(...) DebugPrintf(MainLog, __FILE__, __LINE__, __VA_ARGS__)
+#	if defined(_WIN32) && (_MSC_VER<=1200)
+#		define CDLOG DebugPrintfCDLOG
+#	else
+#		define CDLOG(...) DebugPrintf(MainLog, __FILE__, __LINE__, __VA_ARGS__)
+#	endif
 #else
-#define CDLOG
+#	define CDLOG
 #endif
 
 #ifdef NETLINK_DEBUG
-#define NETLINK_LOG(...) DebugPrintf(MainLog, __FILE__, __LINE__, __VA_ARGS__)
+#	if defined(_WIN32) && (_MSC_VER<=1200)
+#		define NETLINK_LOG DebugPrintfNETLINK
+#	else
+#		define NETLINK_LOG(...) DebugPrintf(MainLog, __FILE__, __LINE__, __VA_ARGS__)
+#	endif
 #else
-#define NETLINK_LOG()
+#	define NETLINK_LOG()
 #endif
 
 #ifdef SCSP_DEBUG
-#define SCSPLOG(...) DebugPrintf(MainLog, __FILE__, __LINE__, __VA_ARGS__)
+#	if defined(_WIN32) && (_MSC_VER<=1200)
+#		define SCSPLOG DebugPrintfSCSP
+#	else
+#		define SCSPLOG(...) DebugPrintf(MainLog, __FILE__, __LINE__, __VA_ARGS__)
+#	endif
 #else
-#define SCSPLOG
+#	define SCSPLOG
 #endif
 
 #ifdef VDP1_DEBUG
-#define VDP1LOG(...) DebugPrintf(MainLog, __FILE__, __LINE__, __VA_ARGS__)
+#	if defined(_WIN32) && (_MSC_VER<=1200)
+#		define VDP1LOG DebugPrintfVDP1
+#	else
+#		define VDP1LOG(...) DebugPrintf(MainLog, __FILE__, __LINE__, __VA_ARGS__)
+#	endif
 #else
-#define VDP1LOG
+#	define VDP1LOG
 #endif
 
 #ifdef VDP2_DEBUG
-#define VDP2LOG(...) DebugPrintf(MainLog, __FILE__, __LINE__, __VA_ARGS__)
+#	if defined(_WIN32) && (_MSC_VER<=1200)
+#		define VDP2LOG DebugPrintfVDP2
+#	else
+#		define VDP2LOG(...) DebugPrintf(MainLog, __FILE__, __LINE__, __VA_ARGS__)
+#	endif
 #else
-#define VDP2LOG
+#	define VDP2LOG
 #endif
 
 #ifdef SMPC_DEBUG
-#define SMPCLOG(...) DebugPrintf(MainLog, __FILE__, __LINE__, __VA_ARGS__)
+#	if defined(_WIN32) && (_MSC_VER<=1200)
+#		define SMPCLOG DebugPrintfSMPC
+#	else
+#		define SMPCLOG(...) DebugPrintf(MainLog, __FILE__, __LINE__, __VA_ARGS__)
+#	endif
 #else
-#define SMPCLOG
+#	define SMPCLOG
 #endif
 
 #endif

@@ -1892,7 +1892,7 @@ void DMAExec(void) {
 
    if ((CurrentSH2->onchip.CHCR0 & 0x1) && (CurrentSH2->onchip.CHCR1 & 0x1)) { // both channel wants DMA
       if (CurrentSH2->onchip.DMAOR & 0x8) { // round robin priority
-         LOG("dma\t: FIXME: two channel dma - round robin priority not properly implemented\n");
+         //LOG("dma\t: FIXME: two channel dma - round robin priority not properly implemented\n");
          DMATransfer(&CurrentSH2->onchip.CHCR0, &CurrentSH2->onchip.SAR0,
 		     &CurrentSH2->onchip.DAR0,  &CurrentSH2->onchip.TCR0,
 		     &CurrentSH2->onchip.VCRDMA0);

@@ -154,7 +154,7 @@ void DummyDeInit(UNUSED Dummy * d)
 
 static u8 FASTCALL UnhandledMemoryReadByte(USED_IF_DEBUG u32 addr)
 {
-   LOG("Unhandled byte read %08X\n", (unsigned int)addr);
+//   LOG("Unhandled byte read %08X\n", (unsigned int)addr);
    return 0;
 }
 

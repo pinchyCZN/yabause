@@ -32,17 +32,17 @@
 
 Debug * DebugInit(const char * n, DebugOutType t, char * s) {
 	Debug * d;
-
-        if ((d = (Debug *) malloc(sizeof(Debug))) == NULL)
-           return NULL;
-
+	
+	if ((d = (Debug *) malloc(sizeof(Debug))) == NULL)
+		return NULL;
+	
 	d->output_type = t;
-
-        if ((d->name = strdup(n)) == NULL)
-        {
-           free(d);
-           return NULL;
-        }
+	
+	if ((d->name = strdup(n)) == NULL)
+	{
+		free(d);
+		return NULL;
+	}
 
 	switch(t) {
 	case DEBUG_STREAM:
@@ -116,6 +116,30 @@ void DebugChangeOutput(Debug * d, DebugOutType t, char * s) {
 		break;
 	}
 }
+//////////////////////////////////////////////////////////////////////////////
+
+Debug *MainLog=0;
+
+//////////////////////////////////////////////////////////////////////////////
+
+void LogStart(void) {
+        MainLog = DebugInit("main", DEBUG_STDOUT, NULL);
+//        MainLog = DebugInit("main", DEBUG_STREAM, "stdout.txt");
+}
+
+//////////////////////////////////////////////////////////////////////////////
+
+void LogStop(void) {
+	DebugDeInit(MainLog);
+	MainLog = NULL;
+}
+
+//////////////////////////////////////////////////////////////////////////////
+
+void LogChangeOutput(DebugOutType t, char * s) {
+
+  DebugChangeOutput( MainLog, t, s );
+}
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -164,27 +188,3 @@ void DebugPrintf(Debug * d, const char * file, u32 line, const char * format, ..
   va_end(l);
 }
 
-//////////////////////////////////////////////////////////////////////////////
-
-Debug * MainLog;
-
-//////////////////////////////////////////////////////////////////////////////
-
-void LogStart(void) {
-        MainLog = DebugInit("main", DEBUG_STDOUT, NULL);
-//        MainLog = DebugInit("main", DEBUG_STREAM, "stdout.txt");
-}
-
-//////////////////////////////////////////////////////////////////////////////
-
-void LogStop(void) {
-	DebugDeInit(MainLog);
-	MainLog = NULL;
-}
-
-//////////////////////////////////////////////////////////////////////////////
-
-void LogChangeOutput(DebugOutType t, char * s) {
-
-  DebugChangeOutput( MainLog, t, s );
-}

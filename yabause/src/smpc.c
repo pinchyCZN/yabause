@@ -548,7 +548,7 @@ void SmpcExec(s32 t) {
                SmpcCKCHG320();
                break;
             case 0x10:
-               SMPCLOG("smpc\t: INTBACK\n");
+               //SMPCLOG("smpc\t: INTBACK\n");
                SmpcINTBACK();
                break;
             case 0x17:

@@ -36,6 +36,9 @@
 #define stricmp strcasecmp
 #endif
 #endif
+#ifdef WIN32
+#define swprintf _snwprintf
+#endif
 
 #ifndef HAVE_WFOPEN
 static char * wcsdupstr(const wchar_t * path)

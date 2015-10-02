@@ -167,14 +167,12 @@ int process_anchor_list(HWND hwnd,short *list)
 	return TRUE;
 }
 short win_maindlg[]={
-	CONTROL_ID,IDCANCEL,
-			WIDTH,50,HEIGHT,14,
-			HUG_R,-100,HUG_B,-14,
-			CONTROL_FINISH,-1,
-	CONTROL_ID,IDC_INITEMU,
-			WIDTH,50,HEIGHT,14,
-			HUG_L,0,HUG_B,-14,
-			CONTROL_FINISH,-1,
+	CONTROL_ID,IDC_STATUS,
+		HUG_L,0,
+		HUG_B,-20,
+		SIZE_WIDTH_OFF,0,
+		HEIGHT,20,
+		CONTROL_FINISH,-1,
 	RESIZE_FINISH
 };
 int get_idc_name(int idc,char *name,int len)

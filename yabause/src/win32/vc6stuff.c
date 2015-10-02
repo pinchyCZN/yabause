@@ -18,6 +18,7 @@ unsigned long _byteswap_ulong(unsigned long value)
 #include "..\vdp1.h"
 #include "..\vidsoft.h"
 #include "..\cs0.h"
+#include "..\debug.h"
 
 
 extern CDInterface ISOCD;
@@ -93,7 +94,6 @@ int YuiErrorMsg(char *str)
 }
 
 
-//int vnsprintf(char *
 #include <winsock2.h>
 #include <ws2tcpip.h>
 
@@ -166,4 +166,76 @@ int tick_emu()
 	YabauseExec();
 	return 0;
 }
+int LOG_debug=1;
+int CDLOG_debug=0;
+int SMPC_debug=1;
+int SCSP_debug=1;
+int VDP1_debug=1;
+int VDP2_debug=1;
+int NETLINK_debug=1;
 
+void _DebugPrintf(const char * format,va_list l)
+{
+	if(MainLog==NULL)
+		return;
+	if(MainLog->output_type==DEBUG_STDOUT){
+		if(MainLog->output.stream)
+			vfprintf(MainLog->output.stream,format,l);
+	}
+}
+void DebugPrintfLOG(const char * format,...)
+{
+	va_list l;
+	if(LOG_debug){
+		va_start(l,format);
+		_DebugPrintf(format,l);
+	}
+}
+void DebugPrintfCDLOG(const char * format,...)
+{
+	va_list l;
+	if(CDLOG_debug){
+		va_start(l,format);
+		_DebugPrintf(format,l);
+	}
+}
+void DebugPrintfSMPC(const char * format,...)
+{
+	va_list l;
+	if(SMPC_debug){
+		va_start(l,format);
+		_DebugPrintf(format,l);
+	}
+}
+void DebugPrintfSCSP(const char * format,...)
+{
+	va_list l;
+	if(SCSP_debug){
+		va_start(l,format);
+		_DebugPrintf(format,l);
+	}
+}
+void DebugPrintfVDP1(const char * format,...)
+{
+	va_list l;
+	if(VDP1_debug){
+		va_start(l,format);
+		_DebugPrintf(format,l);
+	}
+}
+void DebugPrintfVDP2(const char * format,...)
+{
+	va_list l;
+	if(VDP1_debug){
+		va_start(l,format);
+		_DebugPrintf(format,l);
+	}
+}
+void DebugPrintfNETLINK(const char * format,...)
+{
+	va_list l;
+	if(NETLINK_debug){
+		va_start(l,format);
+		_DebugPrintf(format,l);
+	}
+}
