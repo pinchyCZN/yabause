@@ -41,13 +41,17 @@
 #endif
 
 #ifndef FASTCALL
-#ifdef __MINGW32__
-#define FASTCALL __attribute__((fastcall))
-#elif defined (__i386__)
-#define FASTCALL __attribute__((regparm(3)))
-#else
-#define FASTCALL
-#endif
+#	ifdef __MINGW32__
+#		define FASTCALL __attribute__((fastcall))
+#	elif defined (__i386__)
+#		if defined(_WIN32) && (_MSC_VER<=1200)
+#			define FASTCALL	
+#		else
+#			define FASTCALL __attribute__((regparm(3)))
+#		endif
+#	else
+#		define FASTCALL
+#	endif
 #endif
 
 /* When building multiple arches on OS X you must use the compiler-

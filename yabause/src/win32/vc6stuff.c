@@ -13,6 +13,7 @@ unsigned long _byteswap_ulong(unsigned long value)
 #include "..\cdbase.h"
 #include "..\sh2core.h"
 #include "..\sh2int.h"
+#include "..\sh2_dynarec\sh2_dynarec.h"
 #include "..\peripheral.h"
 #include "..\scsp.h"
 #include "..\vdp1.h"
@@ -142,6 +143,7 @@ int init_conf(char *cdpath)
 	memset(&mYabauseConf,0,sizeof(mYabauseConf));
 	mYabauseConf.m68kcoretype = M68KCORE_C68K;
 	mYabauseConf.percoretype = get_percore_win32id();
+	//mYabauseConf.sh2coretype = SH2CORE_DYNAREC;
 	mYabauseConf.sh2coretype = SH2CORE_DEFAULT;
 	mYabauseConf.vidcoretype = VIDCORE_SOFT;
 	mYabauseConf.sndcoretype = SNDCORE_DUMMY;
@@ -170,7 +172,7 @@ int LOG_debug=1;
 int CDLOG_debug=0;
 int SMPC_debug=1;
 int SCSP_debug=1;
-int VDP1_debug=1;
+int VDP1_debug=0;
 int VDP2_debug=1;
 int NETLINK_debug=1;
 
@@ -178,9 +180,13 @@ void _DebugPrintf(const char * format,va_list l)
 {
 	if(MainLog==NULL)
 		return;
-	if(MainLog->output_type==DEBUG_STDOUT){
+	switch(MainLog->output_type){
+	case DEBUG_STDOUT:
+	case DEBUG_STDERR:
+	case DEBUG_STREAM:
 		if(MainLog->output.stream)
 			vfprintf(MainLog->output.stream,format,l);
+		break;
 	}
 }
 void DebugPrintfLOG(const char * format,...)
@@ -239,3 +245,52 @@ void DebugPrintfNETLINK(const char * format,...)
 		_DebugPrintf(format,l);
 	}
 }
+
+
+int jump_vaddr_edi_slave(){ }
+int jump_vaddr_ebp_slave(){ }
+int jump_vaddr_ebx_slave(){ }
+int jump_vaddr_edx_slave(){ }
+int jump_vaddr_ecx_slave(){ }
+int jump_vaddr_eax_slave(){ }
+int jump_vaddr_edi_master(){ }
+int jump_vaddr_ebp_master(){ }
+int jump_vaddr_ebx_master(){ }
+int jump_vaddr_edx_master(){ }
+int jump_vaddr_ecx_master(){ }
+int jump_vaddr_eax_master(){ }
+int dyna_linker(){ }
+int WriteInvalidateLong(){ }
+int WriteInvalidateWord(){ }
+int WriteInvalidateByteSwapped(){ }
+int WriteInvalidateByte(){ }
+int verify_code(){ }
+int macw(){ }
+int macl(){ }
+int div1(){ }
+int slave_entry(){ }
+int cc_interrupt(){ }
+int master_handle_bios(){ }
+int slave_handle_bios(){ }
+int mmap(void *addr,unsigned int length,int prot,int flags,int fd,unsigned int offset)
+{
+	HANDLE hmap;
+	int result;
+	hmap=CreateFileMapping(INVALID_HANDLE_VALUE,
+			NULL,
+			PAGE_EXECUTE_READWRITE,
+			0,
+			length,
+			"SH2_MAP");
+	if(hmap){
+		result=1;
+		addr=MapViewOfFile(hmap,FILE_MAP_ALL_ACCESS,0,offset,length);
+	}
+	else
+		result=0;
+	return result;
+}
+int munmap(void *addr,unsigned int length)
+{
+}
+void YabauseDynarecOneFrameExec(int a,int b){ }

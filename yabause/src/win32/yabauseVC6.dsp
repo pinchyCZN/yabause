@@ -42,7 +42,7 @@ RSC=rc.exe
 # PROP Intermediate_Dir "Release"
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /YX /FD /c
-# ADD CPP /nologo /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /YX /FD /c
+# ADD CPP /nologo /MT /W3 /GX /O2 /I "." /FI"pragma.h" /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "__i386__" /YX /FD /c
 # ADD BASE MTL /nologo /D "NDEBUG" /mktyplib203 /win32
 # ADD MTL /nologo /D "NDEBUG" /mktyplib203 /win32
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
@@ -68,7 +68,7 @@ LINK32=link.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /YX /FD /GZ /c
-# ADD CPP /nologo /MTd /W3 /Gm /GX /ZI /Od /I "." /FI"pragma.h" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "DEBUG" /D "SCSP_DEBUG" /D "VDP1_DEBUG" /D "VDP2_DEBUG" /D "SMPC_DEBUG" /FR /YX /FD /GZ /c
+# ADD CPP /nologo /MTd /W3 /Gm /GX /ZI /Od /I "." /FI"pragma.h" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "__i386__" /D "SH2_DYNAREC" /FR /YX /FD /GZ /c
 # ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /win32
 # ADD MTL /nologo /D "_DEBUG" /mktyplib203 /win32
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
@@ -78,7 +78,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:windows /debug /machine:I386 /pdbtype:sept
-# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib Ws2_32.lib  comctl32.lib /nologo /subsystem:windows /debug /machine:I386 /pdbtype:sept
+# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib Ws2_32.lib comctl32.lib /nologo /subsystem:windows /profile /debug /machine:I386
 
 !ENDIF 
 
@@ -98,6 +98,8 @@ SOURCE=..\c68k\c68k.c
 
 !IF  "$(CFG)" == "yabauseVC6 - Win32 Release"
 
+# ADD CPP /I "..\c68k\inc" /D "C68K_NO_JUMP_TABLE"
+
 !ELSEIF  "$(CFG)" == "yabauseVC6 - Win32 Debug"
 
 # ADD CPP /MTd /I "..\c68k\inc" /D "C68K_NO_JUMP_TABLE"
@@ -111,6 +113,8 @@ SOURCE=..\c68k\c68kexec.c
 
 !IF  "$(CFG)" == "yabauseVC6 - Win32 Release"
 
+# ADD CPP /I "..\c68k\inc" /D "C68K_NO_JUMP_TABLE"
+
 !ELSEIF  "$(CFG)" == "yabauseVC6 - Win32 Debug"
 
 # ADD CPP /MTd /I "..\c68k\inc" /D "C68K_NO_JUMP_TABLE"
@@ -121,16 +125,7 @@ SOURCE=..\c68k\c68kexec.c
 # Begin Source File
 
 SOURCE=..\c68k\gen68k.c
-
-!IF  "$(CFG)" == "yabauseVC6 - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "yabauseVC6 - Win32 Debug"
-
 # PROP Exclude_From_Build 1
-# ADD CPP /MTd /I "..\c68k\inc" /D "C68K_GEN" /D "__WIN32__" /D "C68K_NO_JUMP_TABLE"
-
-!ENDIF 
-
 # End Source File
 # End Group
 # Begin Group "win32"
@@ -159,6 +154,34 @@ SOURCE=.\vc6stuff.c
 # Begin Source File
 
 SOURCE=..\titan\titan.c
+# End Source File
+# End Group
+# Begin Group "sh2_dynarec"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=..\sh2_dynarec\linkage_x86.s
+
+!IF  "$(CFG)" == "yabauseVC6 - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "yabauseVC6 - Win32 Debug"
+
+# PROP Exclude_From_Build 1
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=..\sh2_dynarec\sh2_dynarec.c
+
+!IF  "$(CFG)" == "yabauseVC6 - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "yabauseVC6 - Win32 Debug"
+
+!ENDIF 
+
 # End Source File
 # End Group
 # Begin Source File
@@ -220,15 +243,7 @@ SOURCE=..\m68kd.c
 # Begin Source File
 
 SOURCE=..\m68kq68.c
-
-!IF  "$(CFG)" == "yabauseVC6 - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "yabauseVC6 - Win32 Debug"
-
 # PROP Exclude_From_Build 1
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
@@ -249,15 +264,7 @@ SOURCE=..\osdcore.c
 # Begin Source File
 
 SOURCE=..\perdx.c
-
-!IF  "$(CFG)" == "yabauseVC6 - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "yabauseVC6 - Win32 Debug"
-
 # PROP Exclude_From_Build 1
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
@@ -282,15 +289,7 @@ SOURCE=..\scsp.c
 # Begin Source File
 
 SOURCE=..\scsp2.c
-
-!IF  "$(CFG)" == "yabauseVC6 - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "yabauseVC6 - Win32 Debug"
-
 # PROP Exclude_From_Build 1
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
@@ -335,15 +334,7 @@ SOURCE=..\snddummy.c
 # Begin Source File
 
 SOURCE=..\snddx.c
-
-!IF  "$(CFG)" == "yabauseVC6 - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "yabauseVC6 - Win32 Debug"
-
 # PROP Exclude_From_Build 1
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
@@ -356,15 +347,7 @@ SOURCE=..\sndwav.c
 # Begin Source File
 
 SOURCE="..\sock-dummy.c"
-
-!IF  "$(CFG)" == "yabauseVC6 - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "yabauseVC6 - Win32 Debug"
-
 # PROP Exclude_From_Build 1
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
@@ -373,15 +356,7 @@ SOURCE="..\sock-windows.c"
 # Begin Source File
 
 SOURCE="..\thr-dummy.c"
-
-!IF  "$(CFG)" == "yabauseVC6 - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "yabauseVC6 - Win32 Debug"
-
 # PROP Exclude_From_Build 1
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 

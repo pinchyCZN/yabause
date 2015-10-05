@@ -49,8 +49,10 @@ void LogStart(void);
 void LogStop(void);
 void LogChangeOutput(DebugOutType t, char * s);
 
+//DEBUG,SCSP_DEBUG,VDP1_DEBUG,VDP2_DEBUG,SMPC_DEBUG
+
 #ifdef DEBUG
-#	if defined(_WIN32) && (_MSC_VER<=1200)
+#	if !defined HAVE_C99_VARIADIC_MACROS
 #		define LOG DebugPrintfLOG
 #	else
 #		define LOG(...) DebugPrintf(MainLog, __FILE__, __LINE__, __VA_ARGS__)
@@ -60,7 +62,7 @@ void LogChangeOutput(DebugOutType t, char * s);
 #endif
 
 #ifdef CDDEBUG
-#	if defined(_WIN32) && (_MSC_VER<=1200)
+#	if !defined HAVE_C99_VARIADIC_MACROS
 #		define CDLOG DebugPrintfCDLOG
 #	else
 #		define CDLOG(...) DebugPrintf(MainLog, __FILE__, __LINE__, __VA_ARGS__)
@@ -70,7 +72,7 @@ void LogChangeOutput(DebugOutType t, char * s);
 #endif
 
 #ifdef NETLINK_DEBUG
-#	if defined(_WIN32) && (_MSC_VER<=1200)
+#	if !defined HAVE_C99_VARIADIC_MACROS
 #		define NETLINK_LOG DebugPrintfNETLINK
 #	else
 #		define NETLINK_LOG(...) DebugPrintf(MainLog, __FILE__, __LINE__, __VA_ARGS__)
@@ -80,7 +82,7 @@ void LogChangeOutput(DebugOutType t, char * s);
 #endif
 
 #ifdef SCSP_DEBUG
-#	if defined(_WIN32) && (_MSC_VER<=1200)
+#	if !defined HAVE_C99_VARIADIC_MACROS
 #		define SCSPLOG DebugPrintfSCSP
 #	else
 #		define SCSPLOG(...) DebugPrintf(MainLog, __FILE__, __LINE__, __VA_ARGS__)
@@ -90,7 +92,7 @@ void LogChangeOutput(DebugOutType t, char * s);
 #endif
 
 #ifdef VDP1_DEBUG
-#	if defined(_WIN32) && (_MSC_VER<=1200)
+#	if !defined HAVE_C99_VARIADIC_MACROS
 #		define VDP1LOG DebugPrintfVDP1
 #	else
 #		define VDP1LOG(...) DebugPrintf(MainLog, __FILE__, __LINE__, __VA_ARGS__)
@@ -100,7 +102,7 @@ void LogChangeOutput(DebugOutType t, char * s);
 #endif
 
 #ifdef VDP2_DEBUG
-#	if defined(_WIN32) && (_MSC_VER<=1200)
+#	if !defined HAVE_C99_VARIADIC_MACROS
 #		define VDP2LOG DebugPrintfVDP2
 #	else
 #		define VDP2LOG(...) DebugPrintf(MainLog, __FILE__, __LINE__, __VA_ARGS__)
@@ -110,7 +112,7 @@ void LogChangeOutput(DebugOutType t, char * s);
 #endif
 
 #ifdef SMPC_DEBUG
-#	if defined(_WIN32) && (_MSC_VER<=1200)
+#	if !defined HAVE_C99_VARIADIC_MACROS
 #		define SMPCLOG DebugPrintfSMPC
 #	else
 #		define SMPCLOG(...) DebugPrintf(MainLog, __FILE__, __LINE__, __VA_ARGS__)

@@ -24,7 +24,7 @@
 #include <assert.h>
 #include <string.h> //include for memset
 
-#include <sys/mman.h>
+//#include <sys/mman.h>
 
 #include "../memory.h"
 #include "../sh2core.h"
@@ -1252,7 +1252,7 @@ void shiftimm_alloc(struct regstat *current,int i)
     if(opcode2[i]<6) { // SHLL/SHAL/SHLR/SHAR/ROTL/ROTCL/ROTR/ROTCR
       if(opcode2[i]<4||opcode3[i]<2) {
         // SHL/SHA/ROT don't need T bit as a source, only a destination
-        if(!(current->u&(1LL<<TBIT))) {
+        if(!(current->u&(1<<TBIT))) {
           alloc_reg(current,i,SR);
           dirty_reg(current,SR);
         }
@@ -1615,15 +1615,15 @@ void multdiv_alloc(struct regstat *current,int i)
   if(opcode[i]==3) {
     // DMULU.L / DMULS.L
     #if defined(__i386__) || defined(__x86_64__)
-    if(!(current->u&(1LL<<MACH))) {
+    if(!(current->u&(1<<MACH))) {
       alloc_x86_reg(current,i,MACH,EDX); // Don't need to alloc MACH if it's unneeded
-      current->u&=~(1LL<<MACL); // But if it is, then assume MACL is needed since it will be overwritten
+      current->u&=~(1<<MACL); // But if it is, then assume MACL is needed since it will be overwritten
     }
     alloc_x86_reg(current,i,MACL,EAX);
     #else
-    if(!(current->u&(1LL<<MACH))) {
+    if(!(current->u&(1<<MACH))) {
       alloc_reg(current,i,MACH);
-      current->u&=~(1LL<<MACL);
+      current->u&=~(1<<MACL);
     }
     alloc_reg(current,i,MACL);
     #endif
@@ -1998,7 +1998,7 @@ void alu_assemble(int i,struct regstat *i_regs)
     }
     if(opcode2[i]==10) { // NEGC
       int sr=get_reg(i_regs->regmap,SR);
-      if(i_regs->u&(1LL<<rt1[i])) t=-1;
+      if(i_regs->u&(1<<rt1[i])) t=-1;
       assert(sr>=0);
       emit_negc(s,t,sr);
     }
@@ -2117,12 +2117,12 @@ void shiftimm_assemble(int i,struct regstat *i_regs)
       assert(s==t);
       if(opcode2[i]==0) // SHLL/SHAL
       {
-        if(i_regs->u&(1LL<<TBIT)) emit_shlimm(s,1,s);
+        if(i_regs->u&(1<<TBIT)) emit_shlimm(s,1,s);
         else emit_shlsr(s,sr); // Is there any difference between SHLL and SHAL?
       }
       else if(opcode2[i]==1) // SHLR/SHAR
       {
-        if(i_regs->u&(1LL<<TBIT)) {
+        if(i_regs->u&(1<<TBIT)) {
           // Skip T bit if unneeded
           if(opcode3[i]==0) emit_shrimm(s,1,s);
           if(opcode3[i]==2) emit_sarimm(s,1,s);
@@ -2134,7 +2134,7 @@ void shiftimm_assemble(int i,struct regstat *i_regs)
       }
       else if(opcode2[i]==4) {// ROTL/ROTCL
         if(opcode3[i]==0) {
-          if(i_regs->u&(1LL<<TBIT)) {
+          if(i_regs->u&(1<<TBIT)) {
             emit_rotl(s); // Skip T bit if unneeded
           }else{
             emit_rotlsr(s,sr);
@@ -2145,7 +2145,7 @@ void shiftimm_assemble(int i,struct regstat *i_regs)
       else {
         assert(opcode2[i]==5); // ROTR/ROTCR
         if(opcode3[i]==0) {
-          if(i_regs->u&(1LL<<TBIT)) {
+          if(i_regs->u&(1<<TBIT)) {
             emit_rotr(s); // Skip T bit if unneeded
           }else{
             emit_rotrsr(s,sr);
@@ -2275,7 +2275,7 @@ void load_assemble(int i,struct regstat *i_regs)
   }
   dummy=(t!=get_reg(i_regs->regmap,rt1[i])); // ignore loads to unneeded reg
   if(opcode[i]==12&&opcode2[i]==12) // TST.B
-    dummy=i_regs->u&(1LL<<TBIT);
+    dummy=i_regs->u&(1<<TBIT);
   if (size==0) { // MOV.B
     if(!c||memtarget) {
       if(!dummy) {
@@ -2339,7 +2339,7 @@ void load_assemble(int i,struct regstat *i_regs)
   }
   if(addrmode[i]==POSTINC) {
     if(!((i_regs->wasdoingcp>>s)&1)) {
-      if(!(i_regs->u&(1LL<<rt2[i]))&&rt1[i]!=rt2[i]) 
+      if(!(i_regs->u&(1<<rt2[i]))&&rt1[i]!=rt2[i]) 
         emit_addimm(s,1<<size,s);
     }
   }
@@ -2476,7 +2476,7 @@ void store_assemble(int i,struct regstat *i_regs)
     if(!c||memtarget) {
       emit_rorimm(t,16,t);
       emit_writeword_indexed_map(t,0,addr,map,temp);
-      if(!(i_regs->u&(1LL<<rs1[i]))) 
+      if(!(i_regs->u&(1<<rs1[i]))) 
         emit_rorimm(t,16,t);
     }
     type=STOREL_STUB;
@@ -2575,7 +2575,7 @@ void rmw_assemble(int i,struct regstat *i_regs)
       sr=get_reg(i_regs->regmap,SR);
       assert(sr>=0); // Liveness analysis?
       assert(rt1[i]==TBIT);
-      if(sr>=0&&!(i_regs->u&(1LL<<TBIT))) emit_sh2tas(addr,map,sr);
+      if(sr>=0&&!(i_regs->u&(1<<TBIT))) emit_sh2tas(addr,map,sr);
       else emit_rmw_orimm(addr,map,0x80); // T ignored, set only
     }
     if(opcode2[i]==13) emit_rmw_andimm(addr,map,imm[i]); // AND.B
@@ -2661,9 +2661,9 @@ void multdiv_assemble(int i,struct regstat *i_regs)
     {
       int t1=get_reg(i_regs->regmap,rt1[i]);
       int t2=get_reg(i_regs->regmap,rt2[i]);
-      if(!(i_regs->u&(1LL<<MACH))) 
+      if(!(i_regs->u&(1<<MACH))) 
         emit_zeroreg(t1);
-      if(!(i_regs->u&(1LL<<MACL))) 
+      if(!(i_regs->u&(1<<MACL))) 
         emit_zeroreg(t2);
     }
     if(opcode2[i]==9) // DIV0U
@@ -3754,7 +3754,7 @@ void ujump_assemble(int i,struct regstat *i_regs)
   }
   ds_assemble(i+1,i_regs);
   bc_unneeded=regs[i].u;
-  bc_unneeded|=1LL<<rt1[i];
+  bc_unneeded|=1<<rt1[i];
   wb_invalidate(regs[i].regmap,branch_regs[i].regmap,regs[i].dirty,
                 bc_unneeded);
   load_regs(regs[i].regmap,branch_regs[i].regmap,CCREG,CCREG,CCREG);
@@ -3885,8 +3885,8 @@ void rjump_assemble(int i,struct regstat *i_regs)
   }
   ds_assemble(i+1,i_regs);
   bc_unneeded=regs[i].u;
-  bc_unneeded|=1LL<<rt1[i];
-  bc_unneeded&=~(1LL<<rs1[i]);
+  bc_unneeded|=1<<rt1[i];
+  bc_unneeded&=~(1<<rs1[i]);
   wb_invalidate(regs[i].regmap,branch_regs[i].regmap,regs[i].dirty,
                 bc_unneeded);
   load_regs(regs[i].regmap,branch_regs[i].regmap,rs1[i],CCREG,CCREG);
@@ -4202,7 +4202,7 @@ void sjump_assemble(int i,struct regstat *i_regs)
     address_generation(i+1,i_regs,regs[i].regmap_entry);
     ds_assemble(i+1,i_regs);
     bc_unneeded=regs[i].u;
-    bc_unneeded&=~((1LL<<rs1[i])|(1LL<<rs2[i]));
+    bc_unneeded&=~((1<<rs1[i])|(1<<rs2[i]));
     wb_invalidate(regs[i].regmap,branch_regs[i].regmap,regs[i].dirty,
                   bc_unneeded);
     load_regs(regs[i].regmap,branch_regs[i].regmap,CCREG,SR,SR);
@@ -4326,7 +4326,7 @@ void sjump_assemble(int i,struct regstat *i_regs)
       }
     } // if(!unconditional)
     ds_unneeded=regs[i].u;
-    ds_unneeded&=~((1LL<<rs1[i+1])|(1LL<<rs2[i+1])|(1LL<<rs3[i+1]));
+    ds_unneeded&=~((1<<rs1[i+1])|(1<<rs2[i+1])|(1<<rs3[i+1]));
     // branch taken
     if(!nop) {
       if(taken) set_jump_target(taken,(int)out);
@@ -4507,11 +4507,11 @@ void unneeded_registers(int istart,int iend,int r)
         branch_unneeded_reg[i]=u;
         if(itype[i]!=CJUMP) {
           // Merge in delay slot
-          if(rt1[i+1]>=0) u|=1LL<<rt1[i+1];
-          if(rt2[i+1]>=0) u|=1LL<<rt2[i+1];
-          if(rs1[i+1]>=0) u&=~(1LL<<rs1[i+1]);
-          if(rs2[i+1]>=0) u&=~(1LL<<rs2[i+1]);
-          if(rs3[i+1]>=0) u&=~(1LL<<rs3[i+1]);
+          if(rt1[i+1]>=0) u|=1<<rt1[i+1];
+          if(rt2[i+1]>=0) u|=1<<rt2[i+1];
+          if(rs1[i+1]>=0) u&=~(1<<rs1[i+1]);
+          if(rs2[i+1]>=0) u&=~(1<<rs2[i+1]);
+          if(rs3[i+1]>=0) u&=~(1<<rs3[i+1]);
         }
       }
       else
@@ -4531,17 +4531,17 @@ void unneeded_registers(int istart,int iend,int r)
           }
           if(itype[i]!=CJUMP) {
             // Merge in delay slot
-            if(rt1[i+1]>=0) temp_u|=1LL<<rt1[i+1];
-            if(rt2[i+1]>=0) temp_u|=1LL<<rt2[i+1];
-            if(rs1[i+1]>=0) temp_u&=~(1LL<<rs1[i+1]);
-            if(rs2[i+1]>=0) temp_u&=~(1LL<<rs2[i+1]);
-            if(rs3[i+1]>=0) temp_u&=~(1LL<<rs3[i+1]);
+            if(rt1[i+1]>=0) temp_u|=1<<rt1[i+1];
+            if(rt2[i+1]>=0) temp_u|=1<<rt2[i+1];
+            if(rs1[i+1]>=0) temp_u&=~(1<<rs1[i+1]);
+            if(rs2[i+1]>=0) temp_u&=~(1<<rs2[i+1]);
+            if(rs3[i+1]>=0) temp_u&=~(1<<rs3[i+1]);
           }
-          if(rt1[i]>=0) temp_u|=1LL<<rt1[i];
-          if(rt2[i]>=0) temp_u|=1LL<<rt2[i];
-          if(rs1[i]>=0) temp_u&=~(1LL<<rs1[i]);
-          if(rs2[i]>=0) temp_u&=~(1LL<<rs2[i]);
-          if(rs3[i]>=0) temp_u&=~(1LL<<rs3[i]);
+          if(rt1[i]>=0) temp_u|=1<<rt1[i];
+          if(rt2[i]>=0) temp_u|=1<<rt2[i];
+          if(rs1[i]>=0) temp_u&=~(1<<rs1[i]);
+          if(rs2[i]>=0) temp_u&=~(1<<rs2[i]);
+          if(rs3[i]>=0) temp_u&=~(1<<rs3[i]);
           unneeded_reg[i]=temp_u;
           // Only go three levels deep.  This recursion can take an
           // excessive amount of time if there are a lot of nested loops.
@@ -4556,16 +4556,16 @@ void unneeded_registers(int istart,int iend,int r)
             // Unconditional branch
             u=unneeded_reg[(ba[i]-start)>>1];
             // Always need stack and status in case of interrupt
-            u&=~((1LL<<15)|(1LL<<SR));
+            u&=~((1<<15)|(1<<SR));
             branch_unneeded_reg[i]=u;
         //u=0; // for debugging
         //branch_unneeded_reg[i]=u; // for debugging
             // Merge in delay slot
-            if(rt1[i+1]>=0) u|=1LL<<rt1[i+1];
-            if(rt2[i+1]>=0) u|=1LL<<rt2[i+1];
-            if(rs1[i+1]>=0) u&=~(1LL<<rs1[i+1]);
-            if(rs2[i+1]>=0) u&=~(1LL<<rs2[i+1]);
-            if(rs3[i+1]>=0) u&=~(1LL<<rs3[i+1]);
+            if(rt1[i+1]>=0) u|=1<<rt1[i+1];
+            if(rt2[i+1]>=0) u|=1<<rt2[i+1];
+            if(rs1[i+1]>=0) u&=~(1<<rs1[i+1]);
+            if(rs2[i+1]>=0) u&=~(1<<rs2[i+1]);
+            if(rs3[i+1]>=0) u&=~(1<<rs3[i+1]);
           } else {
             // Conditional branch
             b=unneeded_reg[(ba[i]-start)>>1];
@@ -4574,15 +4574,15 @@ void unneeded_registers(int istart,int iend,int r)
         //branch_unneeded_reg[i]=b; // for debugging
             // Branch delay slot
             if(itype[i]!=CJUMP) {
-              if(rt1[i+1]>=0) b|=1LL<<rt1[i+1];
-              if(rt2[i+1]>=0) b|=1LL<<rt2[i+1];
-              if(rs1[i+1]>=0) b&=~(1LL<<rs1[i+1]);
-              if(rs2[i+1]>=0) b&=~(1LL<<rs2[i+1]);
-              if(rs3[i+1]>=0) b&=~(1LL<<rs3[i+1]);
+              if(rt1[i+1]>=0) b|=1<<rt1[i+1];
+              if(rt2[i+1]>=0) b|=1<<rt2[i+1];
+              if(rs1[i+1]>=0) b&=~(1<<rs1[i+1]);
+              if(rs2[i+1]>=0) b&=~(1<<rs2[i+1]);
+              if(rs3[i+1]>=0) b&=~(1<<rs3[i+1]);
             }
             u&=b;
             // Always need stack and status in case of interrupt
-            u&=~((1LL<<15)|(1LL<<SR));
+            u&=~((1<<15)|(1<<SR));
         //u=0; // for debugging
             if(itype[i]!=CJUMP) {
               if(i<slen-1) {
@@ -4615,12 +4615,12 @@ void unneeded_registers(int istart,int iend,int r)
     //u=uu=0; // DEBUG
     //tdep=(~uu>>rt1[i])&1;
     // Written registers are unneeded
-    if(rt1[i]>=0) u|=1LL<<rt1[i];
-    if(rt2[i]>=0) u|=1LL<<rt2[i];
+    if(rt1[i]>=0) u|=1<<rt1[i];
+    if(rt2[i]>=0) u|=1<<rt2[i];
     // Accessed registers are needed
-    if(rs1[i]>=0) u&=~(1LL<<rs1[i]);
-    if(rs2[i]>=0) u&=~(1LL<<rs2[i]);
-    if(rs3[i]>=0) u&=~(1LL<<rs3[i]);
+    if(rs1[i]>=0) u&=~(1<<rs1[i]);
+    if(rs2[i]>=0) u&=~(1<<rs2[i]);
+    if(rs3[i]>=0) u&=~(1<<rs3[i]);
     // Source-target dependencies
     //uu&=~(tdep<<dep1[i]);
     //uu&=~(tdep<<dep2[i]);
@@ -5297,7 +5297,7 @@ void sh2_dynarec_init()
       memory_map[n]=((u32)HighWram-((n<<12)&0xFFF00000))>>2;
       #endif
     }else
-      memory_map[n]=-1LL;
+      memory_map[n]=-1;
   }
 
   master_cc=slave_cc=0;
@@ -6194,38 +6194,38 @@ int sh2_recompile_block(int addr)
     regs[i].wasdirty=current.dirty;
     if(itype[i]==UJUMP||itype[i]==SJUMP||itype[i]==RJUMP) {
       if(i+1<slen) {
-        //current.u=branch_unneeded_reg[i]&~((1LL<<rs1[i+1])|(1LL<<rs2[i+1]));
+        //current.u=branch_unneeded_reg[i]&~((1<<rs1[i+1])|(1<<rs2[i+1]));
         current.u=branch_unneeded_reg[i];
-        //if(rt1[i+1]>=0) current.u|=1LL<<rt1[i+1];
-        //if(rt2[i+1]>=0) current.u|=1LL<<rt2[i+1];
-        if(rs1[i+1]>=0) current.u&=~(1LL<<rs1[i+1]);
-        if(rs2[i+1]>=0) current.u&=~(1LL<<rs2[i+1]);
-        if(rs3[i+1]>=0) current.u&=~(1LL<<rs3[i+1]);
-        if(rs1[i+1]==TBIT||rs2[i+1]==TBIT) current.u&=~(1LL<<SR);
-        if(rt1[i+1]==TBIT||rt2[i+1]==TBIT) current.u&=~(1LL<<SR);
-        //current.u&=~((1LL<<rs1[i])|(1LL<<rs2[i]));
-        if(rs1[i]>=0) current.u&=~(1LL<<rs1[i]);
-        if(rs2[i]>=0) current.u&=~(1LL<<rs2[i]); // CCREG
-        if(rs1[i]==TBIT||rs2[i]==TBIT) current.u&=~(1LL<<SR); // BT/S BF/S
+        //if(rt1[i+1]>=0) current.u|=1<<rt1[i+1];
+        //if(rt2[i+1]>=0) current.u|=1<<rt2[i+1];
+        if(rs1[i+1]>=0) current.u&=~(1<<rs1[i+1]);
+        if(rs2[i+1]>=0) current.u&=~(1<<rs2[i+1]);
+        if(rs3[i+1]>=0) current.u&=~(1<<rs3[i+1]);
+        if(rs1[i+1]==TBIT||rs2[i+1]==TBIT) current.u&=~(1<<SR);
+        if(rt1[i+1]==TBIT||rt2[i+1]==TBIT) current.u&=~(1<<SR);
+        //current.u&=~((1<<rs1[i])|(1<<rs2[i]));
+        if(rs1[i]>=0) current.u&=~(1<<rs1[i]);
+        if(rs2[i]>=0) current.u&=~(1<<rs2[i]); // CCREG
+        if(rs1[i]==TBIT||rs2[i]==TBIT) current.u&=~(1<<SR); // BT/S BF/S
         regs[i].u=current.u;
       } else { printf("oops, branch at end of block with no delay slot\n");exit(1); }
     }else if(itype[i]==CJUMP) {
       current.u=branch_unneeded_reg[i];
       regs[i].u=current.u;
-      if(rs1[i]>=0) current.u&=~(1LL<<rs1[i]);
-      if(rs2[i]>=0) current.u&=~(1LL<<rs2[i]); // CCREG
-      if(rs1[i]==TBIT||rs2[i]==TBIT) current.u&=~(1LL<<SR); // BT BF
+      if(rs1[i]>=0) current.u&=~(1<<rs1[i]);
+      if(rs2[i]>=0) current.u&=~(1<<rs2[i]); // CCREG
+      if(rs1[i]==TBIT||rs2[i]==TBIT) current.u&=~(1<<SR); // BT BF
     } else {
       if(i+1<slen) {
         regs[i].u=unneeded_reg[i+1];
-        //current.u=unneeded_reg[i+1]&~((1LL<<rs1[i])|(1LL<<rs2[i]));
-        //current.u=unneeded_reg[i+1]&~((1LL<<rs1[i])|(1LL<<rs2[i])|(1LL<<rs3[i]));
+        //current.u=unneeded_reg[i+1]&~((1<<rs1[i])|(1<<rs2[i]));
+        //current.u=unneeded_reg[i+1]&~((1<<rs1[i])|(1<<rs2[i])|(1<<rs3[i]));
         current.u=unneeded_reg[i+1];
-        if(rs1[i]>=0) current.u&=~(1LL<<rs1[i]);
-        if(rs2[i]>=0) current.u&=~(1LL<<rs2[i]);
-        if(rs3[i]>=0) current.u&=~(1LL<<rs3[i]);
-        if(rs1[i]==TBIT||rs2[i]==TBIT) current.u&=~(1LL<<SR);
-        if(rt1[i]==TBIT||rt2[i]==TBIT) current.u&=~(1LL<<SR);
+        if(rs1[i]>=0) current.u&=~(1<<rs1[i]);
+        if(rs2[i]>=0) current.u&=~(1<<rs2[i]);
+        if(rs3[i]>=0) current.u&=~(1<<rs3[i]);
+        if(rs1[i]==TBIT||rs2[i]==TBIT) current.u&=~(1<<SR);
+        if(rt1[i]==TBIT||rt2[i]==TBIT) current.u&=~(1<<SR);
       } else {
         current.u=0;
       }
@@ -6240,7 +6240,7 @@ int sh2_recompile_block(int addr)
       }else{
         current.u=branch_unneeded_reg[i-1];
       }
-      current.u&=~((1LL<<rs1[i])|(1LL<<rs2[i]));
+      current.u&=~((1<<rs1[i])|(1<<rs2[i]));
       memcpy(&temp,&current,sizeof(current));
       temp.wasdirty=temp.dirty;
       // TODO: Take into account unconditional branches, as below
@@ -6498,7 +6498,7 @@ int sh2_recompile_block(int addr)
           branch_regs[i-1].isdoingcp=0;
           branch_regs[i-1].wasdoingcp=0;
           branch_regs[i-1].isconst=0;
-          branch_regs[i-1].u=branch_unneeded_reg[i-1]&~((1LL<<rs1[i-1])|(1LL<<rs2[i-1]));
+          branch_regs[i-1].u=branch_unneeded_reg[i-1]&~((1<<rs1[i-1])|(1<<rs2[i-1]));
           alloc_cc(&branch_regs[i-1],i-1);
           dirty_reg(&branch_regs[i-1],CCREG);
           if(rt1[i-1]==PR) { // BSR
@@ -6513,7 +6513,7 @@ int sh2_recompile_block(int addr)
           branch_regs[i-1].isdoingcp=0;
           branch_regs[i-1].wasdoingcp=0;
           branch_regs[i-1].isconst=0;
-          branch_regs[i-1].u=branch_unneeded_reg[i-1]&~((1LL<<rs1[i-1])|(1LL<<rs2[i-1]));
+          branch_regs[i-1].u=branch_unneeded_reg[i-1]&~((1<<rs1[i-1])|(1<<rs2[i-1]));
           alloc_cc(&branch_regs[i-1],i-1);
           dirty_reg(&branch_regs[i-1],CCREG);
           alloc_reg(&branch_regs[i-1],i-1,rs1[i-1]);
@@ -6544,13 +6544,13 @@ int sh2_recompile_block(int addr)
           if(rt1[i]==TBIT||rt2[i]==TBIT||rt1[i]==SR||rt2[i]==SR||itype[i]==COMPLEX) {
             // The delay slot overwrote the branch condition
             // Delay slot goes after the test (in order)
-            current.u=branch_unneeded_reg[i-1]&~((1LL<<rs1[i])|(1LL<<rs2[i]));
+            current.u=branch_unneeded_reg[i-1]&~((1<<rs1[i])|(1<<rs2[i]));
             delayslot_alloc(&current,i);
             current.isdoingcp=0;
           }
           else
           {
-            current.u=branch_unneeded_reg[i-1]&~(1LL<<rs1[i-1]);
+            current.u=branch_unneeded_reg[i-1]&~(1<<rs1[i-1]);
             // Alloc the branch condition register
             alloc_reg(&current,i-1,SR);
           }
@@ -8209,8 +8209,6 @@ void DynarecSlaveHandleInterrupts()
   //printf("DynarecSlaveHandleInterrupts pc=%x ip=%x\n",slave_pc,(int)slave_ip);
   //printf("master_cc=%d slave_cc=%d\n",master_cc,slave_cc);
 }
-
-#define SH2CORE_DYNAREC 2
 
 void SH2InterpreterSendInterrupt(SH2_struct *context, u8 level, u8 vector);
 int SH2InterpreterGetInterrupts(SH2_struct *context,
