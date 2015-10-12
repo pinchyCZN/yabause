@@ -20,7 +20,7 @@ unsigned long _byteswap_ulong(unsigned long value)
 #include "..\vidsoft.h"
 #include "..\cs0.h"
 #include "..\debug.h"
-
+#include "SNDVisual.h"
 
 extern CDInterface ISOCD;
 
@@ -62,6 +62,7 @@ NULL
 
 SoundInterface_struct *SNDCoreList[] = {
 &SNDDummy,
+&SNDVisual,
 #ifdef HAVE_LIBSDL
 &SNDSDL,
 #endif
@@ -94,9 +95,10 @@ int YuiErrorMsg(char *str)
 	return 0;
 }
 
-
 #include <winsock2.h>
 #include <ws2tcpip.h>
+#include <shlwapi.h>
+#include <Shlobj.h>
 
 #ifndef	_GNU_H_WINDOWS32_SOCKETS
 	typedef struct addrinfo {
@@ -136,6 +138,29 @@ int vc6_load_freeaddrinfo()
 	return 0;
 }
 
+int get_appdata_folder(char *path,int size)
+{
+#define APP_NAME "yabause"
+#define CSIDL_LOCAL_APPDATA 28
+	int found=FALSE;
+	ITEMIDLIST *pidl;
+	IMalloc	*palloc;
+	HWND hwindow=0;
+	if(path==0 || size<MAX_PATH)
+		return found;
+	if(SHGetSpecialFolderLocation(hwindow,CSIDL_LOCAL_APPDATA,&pidl)==NOERROR){
+		if(SHGetPathFromIDList(pidl,path)){
+			_snprintf(path,size,"%s\\%s",path,APP_NAME);
+			found=TRUE;
+		}
+		if(SHGetMalloc(&palloc)==NOERROR){
+			palloc->lpVtbl->Free(palloc,pidl);
+			palloc->lpVtbl->Release(palloc);
+		}
+	}
+	return found;
+}
+
 yabauseinit_struct mYabauseConf;
 
 int init_conf(char *cdpath)
@@ -146,7 +171,7 @@ int init_conf(char *cdpath)
 	//mYabauseConf.sh2coretype = SH2CORE_DYNAREC;
 	mYabauseConf.sh2coretype = SH2CORE_DEFAULT;
 	mYabauseConf.vidcoretype = VIDCORE_SOFT;
-	mYabauseConf.sndcoretype = SNDCORE_DUMMY;
+	mYabauseConf.sndcoretype = SNDCORE_VISUAL; //SNDCORE_DUMMY;
 	mYabauseConf.cdcoretype = CDCORE_ISO;
 	mYabauseConf.carttype = CART_NONE;
 	mYabauseConf.regionid = 0;
@@ -170,8 +195,8 @@ int tick_emu()
 }
 int LOG_debug=1;
 int CDLOG_debug=0;
-int SMPC_debug=1;
-int SCSP_debug=1;
+int SMPC_debug=0;
+int SCSP_debug=0;
 int VDP1_debug=0;
 int VDP2_debug=1;
 int NETLINK_debug=1;
@@ -247,18 +272,18 @@ void DebugPrintfNETLINK(const char * format,...)
 }
 
 
-int jump_vaddr_edi_slave(){ }
-int jump_vaddr_ebp_slave(){ }
-int jump_vaddr_ebx_slave(){ }
-int jump_vaddr_edx_slave(){ }
-int jump_vaddr_ecx_slave(){ }
-int jump_vaddr_eax_slave(){ }
-int jump_vaddr_edi_master(){ }
-int jump_vaddr_ebp_master(){ }
-int jump_vaddr_ebx_master(){ }
-int jump_vaddr_edx_master(){ }
-int jump_vaddr_ecx_master(){ }
-int jump_vaddr_eax_master(){ }
+int jump_vaddr_edi_slave(){return 0; }
+int jump_vaddr_ebp_slave(){return 0; }
+int jump_vaddr_ebx_slave(){return 0; }
+int jump_vaddr_edx_slave(){return 0; }
+int jump_vaddr_ecx_slave(){return 0; }
+int jump_vaddr_eax_slave(){return 0; }
+int jump_vaddr_edi_master(){return 0; }
+int jump_vaddr_ebp_master(){return 0; }
+int jump_vaddr_ebx_master(){return 0; }
+int jump_vaddr_edx_master(){return 0; }
+int jump_vaddr_ecx_master(){return 0; }
+int jump_vaddr_eax_master(){return 0; }
 int dyna_linker(){ }
 int WriteInvalidateLong(){ }
 int WriteInvalidateWord(){ }

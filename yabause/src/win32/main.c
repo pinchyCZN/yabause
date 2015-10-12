@@ -4,6 +4,7 @@
 #include <commctrl.h>
 #include <stdio.h>
 #include <fcntl.h>
+#include <math.h>
 #include "resource.h"
 
 int show_console=0;
@@ -92,6 +93,53 @@ extern unsigned char *dispbuffer;
 #define BUF_HEIGHT 512
 static char tmp_buf[BUF_WIDTH*BUF_HEIGHT*4];
 
+static int audio_buf_left[512];
+static int audio_buf_right[512];
+static int audio_buf_pos=0;
+int store_audio(unsigned int *left,unsigned int *right,unsigned int num_samples)
+{
+	unsigned int i;
+	for(i=0;i<num_samples;i++){
+		audio_buf_pos%=sizeof(audio_buf_left)/sizeof(int);
+		audio_buf_left[i+audio_buf_pos]=left[i];
+		audio_buf_right[i+audio_buf_pos]=right[i];
+		audio_buf_pos++;
+	}
+	return 0;
+}
+int draw_audio(char *buf,int sizeof_buf,unsigned int start_pos)
+{
+	int x,y;
+	int height=30;
+	int width=704/4;
+	int pos=0;
+	for(x=0;x<width;x++){
+		for(y=0;y<height;y++){
+			char r,g,b;
+			int offset;
+			float s,t;
+			offset=start_pos+x*4+y*BUF_WIDTH*2;
+			if(offset>=sizeof_buf)
+				break;
+			s=audio_buf_left[pos];
+			if(s!=0)
+				s=s;
+			s/=500;
+			t=y-height/2;
+			if(fabs(s-t)<1)
+				r=g=b=0x7F;
+			else
+				r=g=b=0;
+			buf[offset]=b;
+			buf[offset+1]=g;
+			buf[offset+2]=r;
+			buf[offset+3]=0;
+		}
+		pos++;
+		pos%=sizeof(audio_buf_left)/sizeof(int);
+	}
+	return 0;
+}
 int draw_fbuffer(HDC hdc,RECT *rect)
 {
 	BITMAPINFO bmi;
@@ -121,6 +169,8 @@ int draw_fbuffer(HDC hdc,RECT *rect)
 				char r,g,b;
 				int offset;
 				offset=i;
+				if(i>=BUF_WIDTH*(BUF_HEIGHT-60))
+					break;
 				r=dispbuffer[offset];
 				g=dispbuffer[offset+1];
 				b=dispbuffer[offset+2];
@@ -129,6 +179,7 @@ int draw_fbuffer(HDC hdc,RECT *rect)
 				tmp_buf[offset+2]=r;
 				tmp_buf[offset+3]=0;
 			}
+			draw_audio(tmp_buf,sizeof(tmp_buf),i);
 		}
 		/*
 		SetDIBitsToDevice(hdc,0,0,704,512,
@@ -308,7 +359,11 @@ LRESULT CALLBACK dialogproc(HWND hwnd,UINT msg,WPARAM wparam,LPARAM lparam)
 		case IDM_SAVE_STATE4:
 		case IDM_SAVE_STATE5:
 			wait_stop_emu_thread();
-			YabSaveStateSlot("c:\\temp\\",LOWORD(wparam)-IDM_SAVE_STATE1);
+			{
+				char path[MAX_PATH]={0};
+				get_appdata_folder(path,sizeof(path));
+				YabSaveStateSlot(path,LOWORD(wparam)-IDM_SAVE_STATE1);
+			}
 			SetEvent(thread1obj);
 			break;
 		case IDM_LOAD_STATE1:
@@ -317,7 +372,11 @@ LRESULT CALLBACK dialogproc(HWND hwnd,UINT msg,WPARAM wparam,LPARAM lparam)
 		case IDM_LOAD_STATE4:
 		case IDM_LOAD_STATE5:
 			wait_stop_emu_thread();
-			YabLoadStateSlot("c:\\temp\\",LOWORD(wparam)-IDM_LOAD_STATE1);
+			{
+				char path[MAX_PATH]={0};
+				get_appdata_folder(path,sizeof(path));
+				YabLoadStateSlot(path,LOWORD(wparam)-IDM_LOAD_STATE1);
+			}
 			SetEvent(thread1obj);
 			break;
 		}
