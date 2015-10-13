@@ -100,10 +100,10 @@ int store_audio(unsigned int *left,unsigned int *right,unsigned int num_samples)
 {
 	unsigned int i;
 	for(i=0;i<num_samples;i++){
+		audio_buf_pos+=i;
 		audio_buf_pos%=sizeof(audio_buf_left)/sizeof(int);
-		audio_buf_left[i+audio_buf_pos]=left[i];
-		audio_buf_right[i+audio_buf_pos]=right[i];
-		audio_buf_pos++;
+		audio_buf_left[audio_buf_pos]=left[i];
+		audio_buf_right[audio_buf_pos]=right[i];
 	}
 	return 0;
 }
@@ -111,7 +111,7 @@ int draw_audio(char *buf,int sizeof_buf,unsigned int start_pos)
 {
 	int x,y;
 	int height=30;
-	int width=704/4;
+	int width=704/2;
 	int pos=0;
 	for(x=0;x<width;x++){
 		for(y=0;y<height;y++){
@@ -135,7 +135,6 @@ int draw_audio(char *buf,int sizeof_buf,unsigned int start_pos)
 			buf[offset+2]=r;
 			buf[offset+3]=0;
 		}
-		pos++;
 		pos%=sizeof(audio_buf_left)/sizeof(int);
 	}
 	return 0;
