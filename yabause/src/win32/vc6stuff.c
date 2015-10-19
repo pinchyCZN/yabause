@@ -195,7 +195,7 @@ int tick_emu()
 }
 int LOG_debug=1;
 int CDLOG_debug=0;
-int SMPC_debug=0;
+int SMPC_debug=1;
 int SCSP_debug=0;
 int VDP1_debug=0;
 int VDP2_debug=1;

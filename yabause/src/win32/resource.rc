@@ -120,6 +120,10 @@ BEGIN
             MENUITEM "Load state 5",                IDM_LOAD_STATE5
         END
     END
+    POPUP "Emulation"
+    BEGIN
+        MENUITEM "RESET",                       IDM_EMU_RESET
+    END
     POPUP "Settings"
     BEGIN
         MENUITEM "Debug options",               IDM_DEBUG_OPTIONS

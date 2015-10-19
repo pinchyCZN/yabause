@@ -2,6 +2,7 @@
 #define _WIN32_WINNT 0x500
 #include <windows.h>
 #include <commctrl.h>
+#include <shlwapi.h>
 #include <stdio.h>
 #include <fcntl.h>
 #include <math.h>
@@ -93,26 +94,18 @@ extern unsigned char *dispbuffer;
 #define BUF_HEIGHT 512
 static char tmp_buf[BUF_WIDTH*BUF_HEIGHT*4];
 
-static int audio_buf_left[512];
-static int audio_buf_right[512];
-static int audio_buf_pos=0;
-int store_audio(unsigned int *left,unsigned int *right,unsigned int num_samples)
-{
-	unsigned int i;
-	for(i=0;i<num_samples;i++){
-		audio_buf_pos+=i;
-		audio_buf_pos%=sizeof(audio_buf_left)/sizeof(int);
-		audio_buf_left[audio_buf_pos]=left[i];
-		audio_buf_right[audio_buf_pos]=right[i];
-	}
-	return 0;
-}
+
 int draw_audio(char *buf,int sizeof_buf,unsigned int start_pos)
 {
 	int x,y;
 	int height=30;
 	int width=704/2;
 	int pos=0;
+	short *audio_buf=0;
+	int audio_buf_len=0;
+	get_audio_buf(&audio_buf,&audio_buf_len);
+	if(audio_buf==0)
+		return 0;
 	for(x=0;x<width;x++){
 		for(y=0;y<height;y++){
 			char r,g,b;
@@ -121,10 +114,8 @@ int draw_audio(char *buf,int sizeof_buf,unsigned int start_pos)
 			offset=start_pos+x*4+y*BUF_WIDTH*2;
 			if(offset>=sizeof_buf)
 				break;
-			s=audio_buf_left[pos];
-			if(s!=0)
-				s=s;
-			s/=500;
+			s=audio_buf[pos];
+			s/=200;
 			t=y-height/2;
 			if(fabs(s-t)<1)
 				r=g=b=0x7F;
@@ -135,7 +126,8 @@ int draw_audio(char *buf,int sizeof_buf,unsigned int start_pos)
 			buf[offset+2]=r;
 			buf[offset+3]=0;
 		}
-		pos%=sizeof(audio_buf_left)/sizeof(int);
+		pos+=2;
+		pos%=audio_buf_len;
 	}
 	return 0;
 }
@@ -321,11 +313,18 @@ LRESULT CALLBACK dialogproc(HWND hwnd,UINT msg,WPARAM wparam,LPARAM lparam)
 	static int status_height=50;
 	switch(msg){
 	case WM_INITDIALOG:
-		init_conf("C:\\EMU\\games\\RS\\023 Radiant Silvergun (J).cue");
-		timer=SetTimer(hwnd,1337,33,NULL);
-		LogStart();
 		open_console();
 		resize_console(120,500);
+		{
+			char *s="C:\\EMU\\games\\RS\\023 Radiant Silvergun (J).cue";
+			if(!PathFileExists(s))
+				s="E:\\Saturn\\Games\\RadiantSilvergun\\023 Radiant Silvergun (J).cue";
+			init_conf(s);
+			init_audio();
+			//test_audio();
+		}
+		timer=SetTimer(hwnd,1337,33,NULL);
+		LogStart();
 		{
 			RECT rect={0};
 			GetWindowRect(hwnd,&rect);
@@ -348,6 +347,11 @@ LRESULT CALLBACK dialogproc(HWND hwnd,UINT msg,WPARAM wparam,LPARAM lparam)
 		switch(LOWORD(wparam)){
 		case IDCANCEL:
 			EndDialog(hwnd,0);
+			break;
+		case IDM_EMU_RESET:
+			wait_stop_emu_thread();
+			YabauseReset();
+			SetEvent(thread1obj);
 			break;
 		case IDM_DEBUG_OPTIONS:
 			DialogBoxParam(ghinstance,MAKEINTRESOURCE(IDD_DEBUG_OPTIONS),hwnd,debug_opt_dlg,0);

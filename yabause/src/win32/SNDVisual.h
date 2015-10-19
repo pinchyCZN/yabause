@@ -27,19 +27,7 @@ static void SNDVisualUpdateAudio(UNUSED u32 *leftchanbuffer, UNUSED u32 *rightch
 
 static u32 SNDVisualGetAudioSpace(void)
 {
-   /* A "hack" to get Visual sound core working enough
-    * so videos are not "freezing". Values have been
-    * found by experiments... I don't have a clue why
-    * they are working ^^;
-    */
-   static int i = 0;
-   i++;
-   if (i == 55) {
-      i = 0;
-      return 85;
-   } else {
-      return 0;
-   }
+	return 44100/10;
 }
 
 void SNDVisualMuteAudio(void)
