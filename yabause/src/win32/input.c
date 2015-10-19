@@ -43,11 +43,11 @@ int PERWin32HandleEvents(void)
 		for(i=0;i<sizeof(keymap)/sizeof(struct KEYMAP);i++){
 			char a,b;
 			a=keys[keymap[i].key]&0x80;
-			if(a)
-				keymap[i].pressed(pad1);
-			else{
-				b=last_keys[keymap[i].key]&0x80;
-				if(a!=b)
+			b=last_keys[keymap[i].key]&0x80;
+			if(a!=b){
+				if(a)
+					keymap[i].pressed(pad1);
+				else
 					keymap[i].released(pad1);
 			}
 		}
