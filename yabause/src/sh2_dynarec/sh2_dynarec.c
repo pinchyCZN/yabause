@@ -25,7 +25,6 @@
 #include <string.h> //include for memset
 
 //#include <sys/mman.h>
-
 #include "../memory.h"
 #include "../sh2core.h"
 #include "../yabause.h"
@@ -45,6 +44,8 @@
 #define MAX_OUTPUT_BLOCK_SIZE 262144
 #define CLOCK_DIVIDER 1
 #define SH2_REGS 23
+
+unsigned int BASE_ADDR=0; // Code generator target address
 
 struct regstat
 {
@@ -250,10 +251,10 @@ int tracedebug=0;
 //#define DEBUG_CYCLE_COUNT 1
 
 void nullf(const char *format, ...) {}
-//#define assem_debug printf
-//#define inv_debug printf
-#define assem_debug nullf
-#define inv_debug nullf
+#define assem_debug printf
+#define inv_debug printf
+//#define assem_debug nullf
+//#define inv_debug nullf
 
 
 // Get address from virtual address
@@ -5235,11 +5236,12 @@ void sh2_dynarec_init()
 {
   int n;
   //printf("Init new dynarec\n");
-  out=(u8 *)BASE_ADDR;
-  if (mmap (out, 1<<TARGET_SIZE_2,
-            PROT_READ | PROT_WRITE | PROT_EXEC,
-            MAP_FIXED | MAP_PRIVATE | MAP_ANONYMOUS,
-            -1, 0) <= 0) {printf("mmap() failed\n");}
+  out=calloc(1<<TARGET_SIZE_2,1);
+  if(out==0){
+	  printf("malloc failed\n");
+	  return;
+  }
+  BASE_ADDR=out;
   //for(n=0x80000;n<0x80800;n++)
   //  invalid_code[n]=1;
   for(n=0;n<131072;n++)
@@ -5255,11 +5257,12 @@ void sh2_dynarec_init()
   expirep=16384; // Expiry pointer, +2 blocks
   literalcount=0;
   stop_after_jal=0;
+  /*
   if (mmap ((void *)0x80000000, 4194304,
             PROT_READ | PROT_WRITE,
             MAP_FIXED | MAP_PRIVATE | MAP_ANONYMOUS,
             -1, 0) <= 0) {printf("mmap() failed\n");}
-
+*/
   // This has to be done after BiosRom etc are allocated
   for(n=0;n<1048576;n++) {
     if(n<0x100) {

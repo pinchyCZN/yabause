@@ -321,7 +321,6 @@ LRESULT CALLBACK dialogproc(HWND hwnd,UINT msg,WPARAM wparam,LPARAM lparam)
 				s="E:\\Saturn\\Games\\RadiantSilvergun\\023 Radiant Silvergun (J).cue";
 			init_conf(s);
 			init_audio();
-			//test_audio();
 		}
 		timer=SetTimer(hwnd,1337,33,NULL);
 		LogStart();

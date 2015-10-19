@@ -171,7 +171,16 @@ SOURCE=..\sh2_dynarec\linkage_x86.s
 
 !ELSEIF  "$(CFG)" == "yabauseVC6 - Win32 Debug"
 
-# PROP Exclude_From_Build 1
+# PROP Ignore_Default_Tool 1
+# Begin Custom Build
+IntDir=.\Debug
+InputPath=..\sh2_dynarec\linkage_x86.s
+InputName=linkage_x86
+
+"$(IntDir)\$(InputName).obj" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	nasm -t -f  win32 -o "$(IntDir)\$(InputName).obj" -Xvc "$(InputPath)"
+
+# End Custom Build
 
 !ENDIF 
 

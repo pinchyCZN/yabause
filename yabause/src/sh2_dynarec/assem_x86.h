@@ -11,7 +11,8 @@
 
 #define USE_MINI_HT 1
 
-#define BASE_ADDR 0x70000000 // Code generator target address
+//                  0x80000000
+//#define BASE_ADDR 0x70000000 // Code generator target address
 #define TARGET_SIZE_2 25 // 2^25 = 32 megabytes
 #define JUMP_TABLE_SIZE 0 // Not needed for 32-bit x86
 

@@ -25,24 +25,6 @@ struct AUDIO_BUF{
 static short visualbuf[AUDIO_BUF_SIZE];
 static int visual_pos=0;
 
-void CALLBACK waveOutProc(
-		HWAVEOUT  hwo,
-		UINT      msg,
-		DWORD_PTR dwInstance,
-		DWORD_PTR dwParam1,
-		DWORD_PTR dwParam2)
-{
-	switch(msg){
-	case WOM_CLOSE:
-		break;
-	case WOM_DONE:
-//		printf("done\n");
-		break;
-	case WOM_OPEN:
-		break;
-	}
-}
-
 int init_audio()
 {
 	WAVEFORMATEX	wfx;
@@ -69,8 +51,6 @@ int init_audio()
 			if(audio_bufs[i].wavehdr.dwFlags&WHDR_PREPARED)
 				waveOutWrite(hwave,&audio_bufs[i].wavehdr,sizeof(audio_bufs[i].wavehdr));
 		}
-		//if(wavehdr.dwFlags&WHDR_PREPARED)
-		//	wavehdr.dwFlags|=WHDR_DONE;
 	}
 	return hwave!=0;
 }
@@ -178,7 +158,6 @@ int test_audio()
 
 			}
 		}
-		//if(wavehdr.dwFlags&WHDR_PREPARED)
-		//	wavehdr.dwFlags|=WHDR_DONE;
 	}
+	return 0;
 }

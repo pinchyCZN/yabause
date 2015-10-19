@@ -168,8 +168,8 @@ int init_conf(char *cdpath)
 	memset(&mYabauseConf,0,sizeof(mYabauseConf));
 	mYabauseConf.m68kcoretype = M68KCORE_C68K;
 	mYabauseConf.percoretype = get_percore_win32id();
-	//mYabauseConf.sh2coretype = SH2CORE_DYNAREC;
 	mYabauseConf.sh2coretype = SH2CORE_DEFAULT;
+	mYabauseConf.sh2coretype = SH2CORE_DYNAREC;
 	mYabauseConf.vidcoretype = VIDCORE_SOFT;
 	mYabauseConf.sndcoretype = SNDCORE_VISUAL; //SNDCORE_DUMMY;
 	mYabauseConf.cdcoretype = CDCORE_ISO;
@@ -300,7 +300,7 @@ int slave_handle_bios(){ }
 int mmap(void *addr,unsigned int length,int prot,int flags,int fd,unsigned int offset)
 {
 	HANDLE hmap;
-	int result;
+	int result=-1;
 	hmap=CreateFileMapping(INVALID_HANDLE_VALUE,
 			NULL,
 			PAGE_EXECUTE_READWRITE,
@@ -308,11 +308,10 @@ int mmap(void *addr,unsigned int length,int prot,int flags,int fd,unsigned int o
 			length,
 			"SH2_MAP");
 	if(hmap){
-		result=1;
 		addr=MapViewOfFile(hmap,FILE_MAP_ALL_ACCESS,0,offset,length);
+		if(addr!=0)
+			result=addr;
 	}
-	else
-		result=0;
 	return result;
 }
 int munmap(void *addr,unsigned int length)
