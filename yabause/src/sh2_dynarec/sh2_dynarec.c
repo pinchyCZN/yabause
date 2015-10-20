@@ -5319,7 +5319,7 @@ void SH2DynarecReset(SH2_struct *context) {
 void sh2_dynarec_cleanup()
 {
   int n;
-  if (munmap ((void *)BASE_ADDR, 1<<TARGET_SIZE_2) < 0) {printf("munmap() failed\n");}
+  //if (munmap ((void *)BASE_ADDR, 1<<TARGET_SIZE_2) < 0) {printf("munmap() failed\n");}
   for(n=0;n<2048;n++) ll_clear(jump_in+n);
   for(n=0;n<2048;n++) ll_clear(jump_out+n);
   for(n=0;n<2048;n++) ll_clear(jump_dirty+n);

@@ -271,7 +271,7 @@ void DebugPrintfNETLINK(const char * format,...)
 	}
 }
 
-
+/*
 int jump_vaddr_edi_slave(){return 0; }
 int jump_vaddr_ebp_slave(){return 0; }
 int jump_vaddr_ebx_slave(){return 0; }
@@ -318,3 +318,4 @@ int munmap(void *addr,unsigned int length)
 {
 }
 void YabauseDynarecOneFrameExec(int a,int b){ }
+*/
