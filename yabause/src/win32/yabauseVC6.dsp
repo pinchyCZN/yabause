@@ -178,8 +178,9 @@ InputPath=..\sh2_dynarec\linkage_x86.s
 InputName=linkage_x86
 
 "$(IntDir)\$(InputName).obj" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	nasm -t -f  win32 -o "$(IntDir)\$(InputName).obj" -Xvc "$(InputPath)"
-
+	echo nasm -f  win32 -o "$(IntDir)\$(InputName).obj" -Xvc "$(InputPath)" 
+	nasm -f  win32 -o "$(IntDir)\$(InputName).obj" -Xvc "$(InputPath)" 
+	
 # End Custom Build
 
 !ENDIF 
