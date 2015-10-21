@@ -165,6 +165,10 @@ SOURCE=..\titan\titan.c
 # PROP Default_Filter ""
 # Begin Source File
 
+SOURCE=..\sh2_dynarec\_linkage_x86.c
+# End Source File
+# Begin Source File
+
 SOURCE=..\sh2_dynarec\linkage_x86.s
 
 !IF  "$(CFG)" == "yabauseVC6 - Win32 Release"

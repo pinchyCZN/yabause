@@ -119,7 +119,7 @@ newline:
 	ret	;/* jmp _master_ip */
 	;.size	YabauseDynarecOneFrameExec, .-YabauseDynarecOneFrameExec
 
-global _master_handle_interrupts
+;global _master_handle_interrupts
 _master_handle_interrupts:
 	mov	eax,[ebp-40] ;/* get return address */
 	mov	[_master_ip],eax
@@ -154,7 +154,7 @@ _slave_entry:
 	jmp	[edx] ;/* jmp *_slave_ip */
 	;.size	slave_entry, .-slave_entry
 
-global _slave_handle_interrupts
+;global _slave_handle_interrupts
 _slave_handle_interrupts:
 	call	_DynarecSlaveHandleInterrupts
 	mov	edx,_slave_ip
@@ -175,7 +175,7 @@ _cc_interrupt: ;/* slave */
 	call	_WDTExec
 	add	esp,0x16
 	;.size	cc_interrupt, .-cc_interrupt
-global _cc_interrupt_master
+;global _cc_interrupt_master
 _cc_interrupt_master:
 	lea	ebp,[40+esp]
 	mov	eax,[-16+ebp] ;/* decilinecount */

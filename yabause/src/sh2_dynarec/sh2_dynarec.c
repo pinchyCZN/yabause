@@ -17,7 +17,9 @@
  *   Free Software Foundation, Inc.,                                       *
  *   51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.          *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-
+#ifdef WIN32
+#include <windows.h>
+#endif
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h> //include for uint64_t
@@ -5236,9 +5238,10 @@ void sh2_dynarec_init()
 {
   int n;
   //printf("Init new dynarec\n");
-  out=calloc(1<<TARGET_SIZE_2,1);
+  out=(u8 *)BASE_ADDR;
+  out=VirtualAlloc(out,1<<TARGET_SIZE_2,MEM_COMMIT,PAGE_EXECUTE_READWRITE);
   if(out==0){
-	  printf("malloc failed\n");
+	  printf("virtual failed\n");
 	  return;
   }
   BASE_ADDR=out;
@@ -5320,6 +5323,9 @@ void sh2_dynarec_cleanup()
 {
   int n;
   //if (munmap ((void *)BASE_ADDR, 1<<TARGET_SIZE_2) < 0) {printf("munmap() failed\n");}
+  if(!VirtualFree(BASE_ADDR,0,MEM_RELEASE)){
+	  printf("Virtual free failed!\n");
+  }
   for(n=0;n<2048;n++) ll_clear(jump_in+n);
   for(n=0;n<2048;n++) ll_clear(jump_out+n);
   for(n=0;n<2048;n++) ll_clear(jump_dirty+n);
