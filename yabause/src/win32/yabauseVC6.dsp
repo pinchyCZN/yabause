@@ -81,7 +81,8 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:windows /debug /machine:I386 /pdbtype:sept
-# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib Ws2_32.lib comctl32.lib Shlwapi.lib winmm.lib /nologo /subsystem:windows /profile /debug /machine:I386
+# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib Ws2_32.lib comctl32.lib Shlwapi.lib winmm.lib /nologo /subsystem:windows /debug /machine:I386
+# SUBTRACT LINK32 /profile
 
 !ENDIF 
 
@@ -172,6 +173,18 @@ SOURCE=..\sh2_dynarec\_linkage_x86.c
 SOURCE=..\sh2_dynarec\linkage_x86.s
 
 !IF  "$(CFG)" == "yabauseVC6 - Win32 Release"
+
+# PROP Ignore_Default_Tool 1
+# Begin Custom Build
+IntDir=.\Release
+InputPath=..\sh2_dynarec\linkage_x86.s
+InputName=linkage_x86
+
+"$(IntDir)\$(InputName).obj" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	echo nasm -f  win32 -o "$(IntDir)\$(InputName).obj" -Xvc "$(InputPath)" 
+	nasm -f  win32 -o "$(IntDir)\$(InputName).obj" -Xvc "$(InputPath)" 
+	
+# End Custom Build
 
 !ELSEIF  "$(CFG)" == "yabauseVC6 - Win32 Debug"
 
