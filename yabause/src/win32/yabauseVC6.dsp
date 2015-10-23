@@ -167,6 +167,15 @@ SOURCE=..\titan\titan.c
 # Begin Source File
 
 SOURCE=..\sh2_dynarec\_linkage_x86.c
+
+!IF  "$(CFG)" == "yabauseVC6 - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "yabauseVC6 - Win32 Debug"
+
+# PROP Exclude_From_Build 1
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
@@ -188,17 +197,8 @@ InputName=linkage_x86
 
 !ELSEIF  "$(CFG)" == "yabauseVC6 - Win32 Debug"
 
+# PROP Exclude_From_Build 1
 # PROP Ignore_Default_Tool 1
-# Begin Custom Build
-IntDir=.\Debug
-InputPath=..\sh2_dynarec\linkage_x86.s
-InputName=linkage_x86
-
-"$(IntDir)\$(InputName).obj" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	echo nasm -f  win32 -o "$(IntDir)\$(InputName).obj" -Xvc "$(InputPath)" 
-	nasm -f  win32 -o "$(IntDir)\$(InputName).obj" -Xvc "$(InputPath)" 
-	
-# End Custom Build
 
 !ENDIF 
 

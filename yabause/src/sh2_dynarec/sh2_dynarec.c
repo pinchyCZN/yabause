@@ -258,7 +258,12 @@ void nullf(const char *format, ...) {}
 //#define assem_debug nullf
 //#define inv_debug nullf
 
-
+int __msgbox(int a)
+{
+	MessageBox(0,"Error","Error",MB_OK|MB_SYSTEMMODAL);
+	exit(1);
+#define exit __msgbox
+}
 // Get address from virtual address
 // This is called from the recompiled BRAF/BSRF instructions
 void *get_addr(u32 vaddr)
@@ -721,6 +726,7 @@ static pointer map_address(u32 address)
 #ifdef __arm__
 #include "assem_arm.c"
 #endif
+
 
 // Add virtual address mapping to linked list
 void ll_add(struct ll_entry **head,int vaddr,void *addr)
@@ -1266,7 +1272,7 @@ void shiftimm_alloc(struct regstat *current,int i)
       }
     }
   }
-  if(opcode[i]==2&opcode2[i]==13) { // XTRCT
+  if(opcode[i]==2&&opcode2[i]==13) { // XTRCT
     clear_const(current,rs2[i]);
     alloc_reg(current,i,rs2[i]);
   }
@@ -3656,7 +3662,10 @@ void do_ccstub(int n)
       }
       emit_writeword(r,slave?(int)&slave_pc:(int)&master_pc);
     }
-    else {printf("Unknown branch type in do_ccstub\n");exit(1);}
+    else {
+		printf("Unknown branch type in do_ccstub\n");
+		exit(1);
+	}
   }
   // Update cycle count
   if(stubs[n][6]==NODS) assert(regs[i].regmap[HOST_CCREG]==CCREG||regs[i].regmap[HOST_CCREG]==-1);
@@ -5916,7 +5925,7 @@ int sh2_recompile_block(int addr)
           if(op2<6) rt2[i]=TBIT;
           if(op2==4||op2==5) {if(op3==2) rs2[i]=TBIT;} // ROTCL/ROTCR
         }
-        if(op==2&op2==13) { // XTRCT
+        if(op==2&&op2==13) { // XTRCT
           rs1[i]=(source[i]>>4)&0xf;
           rs2[i]=(source[i]>>8)&0xf;
         }
@@ -6217,7 +6226,10 @@ int sh2_recompile_block(int addr)
         if(rs2[i]>=0) current.u&=~(1<<rs2[i]); // CCREG
         if(rs1[i]==TBIT||rs2[i]==TBIT) current.u&=~(1<<SR); // BT/S BF/S
         regs[i].u=current.u;
-      } else { printf("oops, branch at end of block with no delay slot\n");exit(1); }
+      } else { 
+		  printf("oops, branch at end of block with no delay slot\n");
+		  exit(1);
+	  }
     }else if(itype[i]==CJUMP) {
       current.u=branch_unneeded_reg[i];
       regs[i].u=current.u;
@@ -8447,3 +8459,5 @@ int * vblanklinecount_p = &yabsys.VBlankLineCount;
 int * maxlinecount_p = &yabsys.MaxLineCount;
 
 void * NumberOfInterruptsOffset = &((SH2_struct *)0)->NumberOfInterrupts;
+
+#include "_linkage_x86.c"

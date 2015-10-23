@@ -132,8 +132,8 @@ int verify_dirty(pointer addr)
   u32 source;
   u32 copy;
   u32 len;
-  assert(ptr[5]==0xB8);
   ptr=(u8 *)addr;
+  assert(ptr[5]==0xB8);
   source=*(u32 *)(ptr+6);
   copy=*(u32 *)(ptr+11);
   len=*(u32 *)(ptr+16);
@@ -159,8 +159,8 @@ void get_bounds(pointer addr,u32 *start,u32 *end)
   u8 *ptr;
   u32 source;
   u32 len;
-  assert(ptr[5]==0xB8);
   ptr=(u8 *)addr;
+  assert(ptr[5]==0xB8);
   source=*(u32 *)(ptr+6);
   //u32 copy=*(u32 *)(ptr+11);
   len=*(u32 *)(ptr+16);
