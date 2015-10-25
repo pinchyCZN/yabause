@@ -572,7 +572,7 @@ void __declspec(naked) WriteInvalidateLong()
 	bt	[cached_code],ecx
 	;*FASTCLL
 	;jnc	MappedMemoryWriteLong
-	jc	write
+	jnc	write
 	push	eax
 	push	edx
 	push	eax
@@ -603,7 +603,7 @@ WriteInvalidateWord:
 	bt	[cached_code],ecx
 	;*FASTCLL
 	;jnc	MappedMemoryWriteWord
-	jc	write
+	jnc	write
 	push	eax
 	push	edx
 	push	eax
@@ -642,7 +642,7 @@ WriteInvalidateByte:
 	bt	[cached_code],ecx
 	;*FASTCLL
 	;jnc	MappedMemoryWriteByte
-	jc	write
+	jnc	write
 	push	eax
 	push	edx
 	push	eax

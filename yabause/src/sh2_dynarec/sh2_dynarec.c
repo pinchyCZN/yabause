@@ -252,7 +252,16 @@ int tracedebug=0;
 
 //#define DEBUG_CYCLE_COUNT 1
 
-void nullf(const char *format, ...) {}
+void nullf(const char *format, ...)
+{
+extern int fps_counter;
+	if(fps_counter>9999)
+	{
+		va_list args;
+		va_start(args,format);
+		vprintf(format,args);
+	}
+}
 //#define assem_debug printf
 //#define inv_debug printf
 #define assem_debug nullf
@@ -8239,7 +8248,7 @@ void SH2InterpreterSetInterrupts(SH2_struct *context, int num_interrupts,
 
 int SH2DynarecInit(void) {return 0;}
 
-void SH2DynarecDeInit() {
+void SH2DynarecDeInit(void) {
   sh2_dynarec_cleanup();
 }
    
