@@ -105,9 +105,10 @@ void set_jump_target(pointer addr,pointer target)
 
 void *kill_pointer(void *stub)
 {
-  u32 *i_ptr=*((u32 **)((u32 *)stub+6));
-  *i_ptr=(u32)stub-(u32)i_ptr-4;
-  return i_ptr;
+  //u32 *i_ptr=*((u32 **)((u32 *)stub+6));
+	u32 *i_ptr=((u32 **)((u32 *)stub+6));
+	*i_ptr=(u32)stub-(u32)i_ptr-4;
+	return i_ptr;
 }
 pointer get_pointer(void *stub)
 {

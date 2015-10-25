@@ -253,10 +253,10 @@ int tracedebug=0;
 //#define DEBUG_CYCLE_COUNT 1
 
 void nullf(const char *format, ...) {}
-#define assem_debug printf
-#define inv_debug printf
-//#define assem_debug nullf
-//#define inv_debug nullf
+//#define assem_debug printf
+//#define inv_debug printf
+#define assem_debug nullf
+#define inv_debug nullf
 
 int __msgbox(int a)
 {
@@ -5247,8 +5247,7 @@ void sh2_dynarec_init()
 {
   int n;
   //printf("Init new dynarec\n");
-  out=(u8 *)BASE_ADDR;
-  out=VirtualAlloc(out,1<<TARGET_SIZE_2,MEM_COMMIT,PAGE_EXECUTE_READWRITE);
+  out=VirtualAlloc(0,1<<TARGET_SIZE_2,MEM_COMMIT|MEM_RESERVE,PAGE_EXECUTE_READWRITE);
   if(out==0){
 	  printf("virtual failed\n");
 	  return;
@@ -5332,7 +5331,7 @@ void sh2_dynarec_cleanup()
 {
   int n;
   //if (munmap ((void *)BASE_ADDR, 1<<TARGET_SIZE_2) < 0) {printf("munmap() failed\n");}
-  if(!VirtualFree(BASE_ADDR,0,MEM_RELEASE)){
+  if(!VirtualFree((LPVOID)BASE_ADDR,0,MEM_RELEASE)){
 	  printf("Virtual free failed!\n");
   }
   for(n=0;n<2048;n++) ll_clear(jump_in+n);
@@ -8072,7 +8071,8 @@ int sh2_recompile_block(int addr)
         ll_add(jump_dirty+page,vaddr,(void *)out);
         entry_point=do_dirty_stub(i);
         ll_add_nodup(jump_in+page,vaddr,(void *)entry_point);
-        if((itype[i]==CJUMP||itype[i]==SJUMP)&&ccstub_return[i]) set_jump_target(ccstub_return[i],entry_point);
+        if((itype[i]==CJUMP||itype[i]==SJUMP)&&ccstub_return[i])
+			set_jump_target(ccstub_return[i],entry_point);
 
         // If there was an existing entry in the hash table,
         // replace it with the new address.

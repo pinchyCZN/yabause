@@ -146,7 +146,7 @@ slave_entry:
 	jne	slave_handle_interrupts
 	mov	esi,slave_cc
 	sub	esi,ebx
-	jmp	dword ptr[edx] ;/* jmp *slave_ip */
+	jmp	edx ;/* jmp *slave_ip */
 	}
 }
 void __declspec(naked) slave_handle_interrupts()
@@ -157,7 +157,7 @@ slave_handle_interrupts:
 	mov	edx,slave_ip
 	mov	esi,slave_cc
 	sub	esi,ebx
-	jmp	dword ptr[edx] ;/* jmp *slave_ip */
+	jmp	edx ;/* jmp *slave_ip */
 	;.size	slave_handle_interrupts, .-slave_handle_interrupts
 	}
 }
@@ -219,10 +219,10 @@ L_A3:
 	mov	ecx,[ecx]
 	inc	edx
 	and dword ptr[ebp-16],0 ;/* decilinecount=0 */
-	cmp	eax, edx ;/* max ? */
+	cmp	edx,eax  ;/* max ? */
 	je	nextframe
 	mov	[ebx],edx ;/* linecount++ */
-	cmp	ecx, edx ;/* vblank ? */
+	cmp	edx,ecx   ;/* vblank ? */
 	je	vblankin
 nextline:
 	add	esp,16
@@ -327,7 +327,7 @@ dyna_linker:
 	and	edx,ecx
 	and	ecx,0xDFFFF
 	or	edx,1024
-	cmp	edx, ecx
+	cmp	ecx,edx
 	cmova	ecx,edx
 	;/* jump_in lookup */
 	mov	edx,[jump_in+ecx*4]
@@ -352,7 +352,7 @@ L_B2:
 	lea	edx,[-4+edi]
 	sub	edx,ebx
 	mov	[ebx],edx
-	jmp	dword ptr[edi]
+	jmp	edi
 L_B3:
 	;/* hash_table lookup */
 	mov	edi,eax
@@ -364,7 +364,7 @@ L_B3:
 	jne	L_B5
 L_B4:
 	mov	[hash_table+4+edi], edx
-	jmp	dword ptr[edx]
+	jmp	edx
 L_B5:
 	cmp	[hash_table+8+edi],eax
 	lea	edi,[8+edi]
@@ -388,7 +388,7 @@ L_B7:
 	mov	[hash_table-4+edi],edx
 	mov	[hash_table+edi],ebx
 	mov	[hash_table+4+edi],ecx
-	jmp	dword ptr[edx]
+	jmp	edx
 L_B8:
 	mov	edi,eax
 	pushad
@@ -510,7 +510,7 @@ void __declspec(naked)  jump_vaddr()
 	jne	L_C2
 L_C1:
 	mov	edi,[hash_table+4+eax]
-	jmp	dword ptr[edi]
+	jmp	edi
 L_C2:
 	cmp	[hash_table+8+eax],edi
 	lea	eax,[8+eax]
@@ -519,7 +519,7 @@ L_C2:
 	push	edi
 	call	get_addr
 	add	esp,4
-	jmp	dword ptr[eax]
+	jmp	eax
 	;.size	jump_vaddr, .-jump_vaddr
 	}
 }
@@ -560,19 +560,19 @@ L_D5:
 	add	esp,4 ;/* pop return address, we're not returning */
 	call	get_addr
 	add	esp,4 ;/* pop virtual address */
-	jmp	dword ptr[eax]
+	jmp	eax
 	;.size	verify_code, .-verify_code
 	}
 }
 void __declspec(naked) WriteInvalidateLong()
 {
 	_asm{
-;global WriteInvalidateLong
-WriteInvalidateLong:
 	mov	ecx,eax
 	shr	ecx,12
 	bt	[cached_code],ecx
-	jnc	MappedMemoryWriteLong
+	;*FASTCLL
+	;jnc	MappedMemoryWriteLong
+	jc	write
 	push	eax
 	push	edx
 	push	eax
@@ -580,7 +580,16 @@ WriteInvalidateLong:
 	pop	eax
 	pop	edx
 	pop	eax
-	jmp	MappedMemoryWriteLong
+	;*FASTCLL
+	;jmp	MappedMemoryWriteLong
+write:
+	;push	edx
+	;push	ecx
+	push	edx
+	push	eax
+	call	MappedMemoryWriteLong
+	add	esp,8
+	ret
 	;.size	WriteInvalidateLong, .-WriteInvalidateLong
 	}
 }
@@ -592,7 +601,9 @@ WriteInvalidateWord:
 	mov	ecx,eax
 	shr	ecx,12
 	bt	[cached_code],ecx
-	jnc	MappedMemoryWriteWord
+	;*FASTCLL
+	;jnc	MappedMemoryWriteWord
+	jc	write
 	push	eax
 	push	edx
 	push	eax
@@ -600,7 +611,16 @@ WriteInvalidateWord:
 	pop	eax
 	pop	edx
 	pop	eax
-	jmp	MappedMemoryWriteWord
+	;*FASTCLL
+	;jmp	MappedMemoryWriteWord
+write:
+	;push	edx
+	;push	ecx
+	push	edx
+	push	eax
+	call	MappedMemoryWriteWord
+	add	esp,8
+	ret
 	;.size	WriteInvalidateWord, .-WriteInvalidateWord
 	}
 }
@@ -620,7 +640,9 @@ WriteInvalidateByte:
 	mov	ecx,eax
 	shr	ecx,12
 	bt	[cached_code],ecx
-	jnc	MappedMemoryWriteByte
+	;*FASTCLL
+	;jnc	MappedMemoryWriteByte
+	jc	write
 	push	eax
 	push	edx
 	push	eax
@@ -628,7 +650,16 @@ WriteInvalidateByte:
 	pop	eax
 	pop	edx
 	pop	eax
-	jmp	MappedMemoryWriteByte
+	;FASTCLL
+	;jmp	MappedMemoryWriteByte
+write:
+	;push	edx
+	;push	ecx
+	push	edx
+	push	eax
+	call	MappedMemoryWriteByte
+	add	esp,8
+	ret
 	;.size	WriteInvalidateByte, .-WriteInvalidateByte
 	}
 }
@@ -709,10 +740,15 @@ macl:
 	push	edx ;/* MACH */
 	push	eax ;/* MACL */
 	mov	eax,edi
+	; *FASTCLL*
+	push	eax
 	call	MappedMemoryReadLong
+	add	esp,4
 	mov	esi,eax
 	mov	eax,ebp
+	push	eax
 	call	MappedMemoryReadLong
+	add	esp,4
 	add	ebp,4
 	add	edi,4
 	imul	esi
@@ -731,7 +767,7 @@ macl_saturation:
 	cmovl	eax,ecx
 	not	esi
 	not	ecx
-	cmp	esi, edx
+	cmp	edx,esi
 	cmovg	edx,esi
 	cmovg	eax,ecx
 	ret
@@ -750,10 +786,16 @@ macw:
 	push	edx ;/* MACH */
 	push	eax ;/* MACL */
 	mov	eax,edi
+	;*FASTCLL
+	push	eax
 	call	MappedMemoryReadWord
+	add	esp,4
 	movsx	esi,ax
 	mov		eax,ebp
+	;*FASTCLL
+	push	eax
 	call	MappedMemoryReadWord
+	add	esp,4
 	movsx	eax,ax
 	add		ebp,2
 	add		edi,2
@@ -766,7 +808,7 @@ macw:
 	ret
 macw_saturation:
 	mov	esi,[esp]
-	sar	esi,0x31
+	sar	esi,31
 	add	eax,[esp] ;/* MACL */
 	adc	edx,esi
 	mov	esi,0x80000000
@@ -792,7 +834,10 @@ master_handle_bios:
 	mov	[master_cc],esi
 	mov	[master_ip],edx
 	mov	eax,MSH2
+	;*FASTCLL
+	push eax
 	call	BiosHandleFunc
+	add esp,4
 	mov	edx,master_ip
 	mov	esi,master_cc
 	mov	[esp],edx
@@ -809,10 +854,13 @@ slave_handle_bios:
 	mov	[slave_cc],esi
 	mov	[slave_ip],edx
 	mov	eax,[SSH2]
+	;*FASTCLL
+	push eax
 	call	BiosHandleFunc
+	add esp,4
 	mov	edx,slave_ip
 	mov	esi,slave_cc
-	jmp	dword ptr[edx] ;/* jmp *slave_ip */
+	jmp	edx ;/* jmp *slave_ip */
 	;.size	slave_handle_bios, .-slave_handle_bios
 	}
 }
