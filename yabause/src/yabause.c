@@ -444,7 +444,7 @@ int YabauseEmulate(void) {
    DoMovie();
 
    #if defined(SH2_DYNAREC)
-   if(SH2Core->id==2) {
+   if(SH2Core->id==SH2CORE_DYNAREC) {
      if (yabsys.IsPal)
        YabauseDynarecOneFrameExec(722,0); // m68kcycles,m68kcenticycles
      else
