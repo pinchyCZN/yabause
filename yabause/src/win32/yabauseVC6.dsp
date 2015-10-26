@@ -43,7 +43,7 @@ RSC=rc.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /YX /FD /c
-# ADD CPP /nologo /MT /W3 /GX /O2 /I "." /FI"pragma.h" /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "__i386__" /D "SMPC_DEBUG" /FR /FD /c
+# ADD CPP /nologo /MT /W3 /GX /O2 /I "." /FI"pragma.h" /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "HAVE_C68K" /D "__i386__" /D "SH2_DYNAREC" /FR /FD /c
 # SUBTRACT CPP /YX
 # ADD BASE MTL /nologo /D "NDEBUG" /mktyplib203 /win32
 # ADD MTL /nologo /D "NDEBUG" /mktyplib203 /win32
@@ -167,15 +167,7 @@ SOURCE=..\titan\titan.c
 # Begin Source File
 
 SOURCE=..\sh2_dynarec\_linkage_x86.c
-
-!IF  "$(CFG)" == "yabauseVC6 - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "yabauseVC6 - Win32 Debug"
-
 # PROP Exclude_From_Build 1
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
@@ -183,17 +175,8 @@ SOURCE=..\sh2_dynarec\linkage_x86.s
 
 !IF  "$(CFG)" == "yabauseVC6 - Win32 Release"
 
+# PROP Exclude_From_Build 1
 # PROP Ignore_Default_Tool 1
-# Begin Custom Build
-IntDir=.\Release
-InputPath=..\sh2_dynarec\linkage_x86.s
-InputName=linkage_x86
-
-"$(IntDir)\$(InputName).obj" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	echo nasm -f  win32 -o "$(IntDir)\$(InputName).obj" -Xvc "$(InputPath)" 
-	nasm -f  win32 -o "$(IntDir)\$(InputName).obj" -Xvc "$(InputPath)" 
-	
-# End Custom Build
 
 !ELSEIF  "$(CFG)" == "yabauseVC6 - Win32 Debug"
 
@@ -206,6 +189,15 @@ InputName=linkage_x86
 # Begin Source File
 
 SOURCE=..\sh2_dynarec\sh2_dynarec.c
+
+!IF  "$(CFG)" == "yabauseVC6 - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "yabauseVC6 - Win32 Debug"
+
+# SUBTRACT CPP /FA<none>
+
+!ENDIF 
+
 # End Source File
 # End Group
 # Begin Source File
