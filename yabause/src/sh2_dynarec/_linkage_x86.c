@@ -22,7 +22,9 @@ void slave_handle_interrupts();
 void cc_interrupt_master();
 void newline();
 void jump_vaddr();
-
+/*
+NOTE: __fastcall for MSVC ecx=arg1 edx=arg2
+*/
 void __declspec(naked)  YabauseDynarecOneFrameExec(int a,int b)
 {
 	_asm{
@@ -558,10 +560,10 @@ void __declspec(naked) FASTCALL WriteInvalidateLong(u32 addr, u32 val)
 	;*FASTCLL
 	;jmp	MappedMemoryWriteLong
 write:
-	push	edx
-	push	eax
+	push	ecx
+	mov		ecx,eax
 	call	MappedMemoryWriteLong
-	add	esp,8
+	pop		ecx
 	ret
 	}
 }
@@ -584,10 +586,10 @@ void __declspec(naked) FASTCALL WriteInvalidateWord(u32 addr, u32 val)
 	;*FASTCLL
 	;jmp	MappedMemoryWriteWord
 write:
-	push	edx
-	push	eax
+	push	ecx
+	mov		ecx,eax
 	call	MappedMemoryWriteWord
-	add	esp,8
+	pop		ecx
 	ret
 	}
 }
@@ -617,10 +619,10 @@ void __declspec(naked) FASTCALL WriteInvalidateByte(u32 addr, u32 val)
 	;FASTCLL
 	;jmp	MappedMemoryWriteByte
 write:
-	push	edx
-	push	eax
+	push	ecx
+	mov		ecx,eax
 	call	MappedMemoryWriteByte
-	add	esp,8
+	pop		ecx
 	ret
 	}
 }
@@ -699,14 +701,16 @@ void __declspec(naked) macl()
 	push	eax ;/* MACL */
 	mov	eax,edi
 	; *FASTCLL*
-	push	eax
+	push	ecx
+	mov		ecx,eax
 	call	MappedMemoryReadLong
-	add	esp,4
+	pop		ecx
 	mov	esi,eax
 	mov	eax,ebp
-	push	eax
+	push	ecx
+	mov		ecx,eax
 	call	MappedMemoryReadLong
-	add	esp,4
+	pop		ecx
 	add	ebp,4
 	add	edi,4
 	imul	esi
@@ -743,15 +747,17 @@ void __declspec(naked) macw()
 	push	eax ;/* MACL */
 	mov	eax,edi
 	;*FASTCLL
-	push	eax
+	push	ecx
+	mov		ecx,eax
 	call	MappedMemoryReadWord
-	add	esp,4
+	pop		ecx
 	movsx	esi,ax
 	mov		eax,ebp
 	;*FASTCLL
-	push	eax
+	push	ecx
+	mov		ecx,eax
 	call	MappedMemoryReadWord
-	add	esp,4
+	pop		ecx
 	movsx	eax,ax
 	add		ebp,2
 	add		edi,2
@@ -789,9 +795,10 @@ void __declspec(naked) master_handle_bios()
 	mov	[master_ip],edx
 	mov	eax,MSH2
 	;*FASTCLL
-	push eax
+	push	ecx
+	mov		ecx,eax
 	call	BiosHandleFunc
-	add esp,4
+	pop		ecx
 	mov	edx,master_ip
 	mov	esi,master_cc
 	mov	[esp],edx
@@ -807,9 +814,10 @@ void __declspec(naked) slave_handle_bios()
 	mov	[slave_ip],edx
 	mov	eax,[SSH2]
 	;*FASTCLL
-	push eax
+	push	ecx
+	mov		ecx,eax
 	call	BiosHandleFunc
-	add esp,4
+	pop		ecx
 	mov	edx,slave_ip
 	mov	esi,slave_cc
 	jmp	edx ;/* jmp *slave_ip */
