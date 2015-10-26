@@ -45,8 +45,8 @@
 #		define FASTCALL __attribute__((fastcall))
 #	elif defined (__i386__)
 #		if defined(_WIN32) && (_MSC_VER<=1200)
-#			define FASTCALL	
-//#			define FASTCALL __fastcall
+//#			define FASTCALL	
+#			define FASTCALL __fastcall
 #		else
 #			define FASTCALL __attribute__((regparm(3)))
 #		endif

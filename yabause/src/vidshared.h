@@ -71,7 +71,7 @@ typedef struct
    int screenover;
    int msb;
    
-   void FASTCALL (* PlaneAddr)(void *, int);
+   void (FASTCALL * PlaneAddr)(void *, int);
    u32 charaddr;
    int planew, planew_bits, planeh, planeh_bits;
    int MaxH,MaxV;
@@ -99,8 +99,8 @@ typedef struct
     int WinHEnd;
 } vdp2WindowInfo;
 
-typedef u32 FASTCALL (*Vdp2ColorRamGetColor_func)(void *, u32 , int);
-typedef vdp2rotationparameter_struct * FASTCALL (*Vdp2GetRParam_func)(void *, int, int);
+typedef u32 (FASTCALL *Vdp2ColorRamGetColor_func)(void *, u32 , int);
+typedef vdp2rotationparameter_struct * (FASTCALL *Vdp2GetRParam_func)(void *, int, int);
 
 typedef struct 
 {
@@ -142,9 +142,9 @@ typedef struct
    s32 cob;
 
    float coordincx, coordincy;
-   void FASTCALL (* PlaneAddr)(void *, int);
-   u32 FASTCALL (*Vdp2ColorRamGetColor)(void *, u32 , int );
-   u32 FASTCALL (*PostPixelFetchCalc)(void *, u32);
+   void (FASTCALL * PlaneAddr)(void *, int);
+   u32 (FASTCALL *Vdp2ColorRamGetColor)(void *, u32 , int );
+   u32 (FASTCALL *PostPixelFetchCalc)(void *, u32);
    int patternpixelwh;
    int draww;
    int drawh;
@@ -173,9 +173,9 @@ typedef struct
    // Rotate Screen
    vdp2WindowInfo * pWinInfo;
    int WindwAreaMode;
-   vdp2rotationparameter_struct * FASTCALL (*GetKValueA)(vdp2rotationparameter_struct*,int);
-   vdp2rotationparameter_struct * FASTCALL (*GetKValueB)(vdp2rotationparameter_struct*,int);   
-   vdp2rotationparameter_struct * FASTCALL (*GetRParam)(void *, int h,int v);
+   vdp2rotationparameter_struct * (FASTCALL *GetKValueA)(vdp2rotationparameter_struct*,int);
+   vdp2rotationparameter_struct * (FASTCALL *GetKValueB)(vdp2rotationparameter_struct*,int);   
+   vdp2rotationparameter_struct * (FASTCALL *GetRParam)(void *, int h,int v);
    u32 LineColorBase;
    
    void (*LoadLineParams)(void *, int line);
@@ -226,7 +226,7 @@ typedef struct
    int msb;
    int linescreen;
 
-   void FASTCALL (* PlaneAddr)(void *, int);
+   void (FASTCALL * PlaneAddr)(void *, int);
 } vdp2rotationparameterfp_struct;
 
 typedef struct

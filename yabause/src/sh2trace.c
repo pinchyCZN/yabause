@@ -55,21 +55,21 @@ static u64 current_cycles = 0;  // Cycle count on last call to sh2_trace()
 
 /*************************************************************************/
 
-FASTCALL u64 sh2_cycle_count(void)
+u64 FASTCALL sh2_cycle_count(void)
 {
     return current_cycles;
 }
 
 /*-----------------------------------------------------------------------*/
 
-FASTCALL void sh2_trace_add_cycles(s32 cycles)
+void FASTCALL sh2_trace_add_cycles(s32 cycles)
 {
     cycle_accum += cycles;
 }
 
 /*-----------------------------------------------------------------------*/
 
-FASTCALL void sh2_trace_writeb(u32 address, u32 value)
+void FASTCALL sh2_trace_writeb(u32 address, u32 value)
 {
 #ifdef BINARY_LOG
         struct {
@@ -98,7 +98,7 @@ FASTCALL void sh2_trace_writeb(u32 address, u32 value)
     }
 }
 
-FASTCALL void sh2_trace_writew(u32 address, u32 value)
+void FASTCALL sh2_trace_writew(u32 address, u32 value)
 {
 #ifdef BINARY_LOG
         struct {
@@ -127,7 +127,7 @@ FASTCALL void sh2_trace_writew(u32 address, u32 value)
     }
 }
 
-FASTCALL void sh2_trace_writel(u32 address, u32 value)
+void FASTCALL sh2_trace_writel(u32 address, u32 value)
 {
     if (logfile) {
 #ifdef BINARY_LOG
@@ -166,7 +166,7 @@ static INLINE void HEXIT(char * const ptr, u32 val, int ndigits)
 }
 #endif
 
-FASTCALL void sh2_trace(SH2_struct *state, u32 address)
+void FASTCALL sh2_trace(SH2_struct *state, u32 address)
 {
     current_cycles = cycle_accum + state->cycles;
 

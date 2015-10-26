@@ -2780,7 +2780,7 @@ static INLINE void SH2HandleInterrupts(SH2_struct *context)
 
 //////////////////////////////////////////////////////////////////////////////
 
-FASTCALL void SH2DebugInterpreterExec(SH2_struct *context, u32 cycles)
+void FASTCALL SH2DebugInterpreterExec(SH2_struct *context, u32 cycles)
 {
 #ifdef SH2_TRACE
    /* Avoid accumulating leftover cycles multiple times, since the trace
@@ -2876,7 +2876,7 @@ FASTCALL void SH2DebugInterpreterExec(SH2_struct *context, u32 cycles)
 
 //////////////////////////////////////////////////////////////////////////////
 
-FASTCALL void SH2InterpreterExec(SH2_struct *context, u32 cycles)
+void FASTCALL SH2InterpreterExec(SH2_struct *context, u32 cycles)
 {
    SH2HandleInterrupts(context);
 

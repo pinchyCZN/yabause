@@ -405,7 +405,7 @@ typedef struct
    int (*Init)(void);
    void (*DeInit)(void);
    void (*Reset)(SH2_struct *context);
-   void FASTCALL (*Exec)(SH2_struct *context, u32 cycles);
+   void (FASTCALL *Exec)(SH2_struct *context, u32 cycles);
 
    void (*GetRegisters)(SH2_struct *context, sh2regs_struct *regs);
    u32 (*GetGPR)(SH2_struct *context, int num);

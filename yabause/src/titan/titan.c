@@ -23,7 +23,7 @@
 
 /* private */
 typedef u32 (*TitanBlendFunc)(u32 top, u32 bottom);
-typedef int FASTCALL (*TitanTransFunc)(u32 pixel);
+typedef int (FASTCALL *TitanTransFunc)(u32 pixel);
 
 static struct TitanContext {
    int inited;

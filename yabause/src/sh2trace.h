@@ -23,11 +23,11 @@
 
 #include "core.h"
 
-extern FASTCALL u64 sh2_cycle_count(void);
-extern FASTCALL void sh2_trace_add_cycles(s32 cycles);
-extern FASTCALL void sh2_trace_writeb(u32 address, u32 value);
-extern FASTCALL void sh2_trace_writew(u32 address, u32 value);
-extern FASTCALL void sh2_trace_writel(u32 address, u32 value);
-extern FASTCALL void sh2_trace(SH2_struct *state, u32 address);
+extern u64 FASTCALL sh2_cycle_count(void);
+extern void FASTCALL sh2_trace_add_cycles(s32 cycles);
+extern void FASTCALL sh2_trace_writeb(u32 address, u32 value);
+extern void FASTCALL sh2_trace_writew(u32 address, u32 value);
+extern void FASTCALL sh2_trace_writel(u32 address, u32 value);
+extern void FASTCALL sh2_trace(SH2_struct *state, u32 address);
 
 #endif  // SH2TRACE_H

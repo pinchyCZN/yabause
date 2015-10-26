@@ -3007,7 +3007,7 @@ scsp_alloc_bufs (void)
 }
 
 static u8 IsM68KRunning;
-static s32 FASTCALL (*m68kexecptr)(s32 cycles);  // M68K->Exec or M68KExecBP
+static s32 (FASTCALL *m68kexecptr)(s32 cycles);  // M68K->Exec or M68KExecBP
 static s32 savedcycles;  // Cycles left over from the last M68KExec() call
 
 //////////////////////////////////////////////////////////////////////////////
