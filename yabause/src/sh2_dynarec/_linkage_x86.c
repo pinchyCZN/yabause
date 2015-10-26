@@ -26,7 +26,6 @@ void jump_vaddr();
 void __declspec(naked)  YabauseDynarecOneFrameExec(int a,int b)
 {
 	_asm{
-
 	push	ebp
 	mov		ebp,esp
 	mov		eax,master_ip
@@ -71,9 +70,12 @@ void __declspec(naked)  YabauseDynarecOneFrameExec(int a,int b)
 void __declspec(naked) newline()
 {
 	_asm{
-newline:
 ;/* const u32 decilinecycles = yabsys.DecilineStop >> yabsys_timing_bits; */
 ;/* const u32 cyclesinc = yabsys.DecilineStop * 10; */
+;	cmp dword ptr[master_pc],0x06050b16
+;	jne	skip
+;	nop
+;skip:
 	mov	eax,[decilinestop_p]
 	mov	ecx,[yabsys_timing_bits]
 	mov	eax,[eax]
@@ -106,13 +108,11 @@ newline:
 	mov	esi,master_cc
 	sub	esi,ebx
 	ret	;/* jmp master_ip */
-	;.size	YabauseDynarecOneFrameExec, .-YabauseDynarecOneFrameExec
 	}
 }
 void __declspec(naked) master_handle_interrupts()
 {
 	_asm{
-master_handle_interrupts:
 	mov	eax,[ebp-40] ;/* get return address */
 	mov	[master_ip],eax
 	call	DynarecMasterHandleInterrupts
@@ -121,13 +121,11 @@ master_handle_interrupts:
 	mov	[ebp-40],eax ;/* overwrite return address */
 	sub	esi,ebx
 	ret	;/* jmp master_ip */
-	;.size	master_handle_interrupts, .-master_handle_interrupts
 	}
 }
 void __declspec(naked) slave_entry()
 {
 	_asm{
-slave_entry:
 	mov	ebx,[16+esp] ;/* sh2cycles */
 	mov	[master_cc],esi
 	sub	esp,12
@@ -152,19 +150,17 @@ slave_entry:
 void __declspec(naked) slave_handle_interrupts()
 {
 	_asm{
-slave_handle_interrupts:
 	call	DynarecSlaveHandleInterrupts
 	mov	edx,slave_ip
 	mov	esi,slave_cc
 	sub	esi,ebx
 	jmp	edx ;/* jmp *slave_ip */
-	;.size	slave_handle_interrupts, .-slave_handle_interrupts
 	}
 }
 void __declspec(naked) cc_interrupt()
 {
 	_asm{
-cc_interrupt: ;/* slave */
+	;/* slave */
 	mov	ebx,[16+esp] ;/* sh2cycles */
 	mov	[slave_ip],ebp
 	mov	[slave_cc],esi
@@ -175,13 +171,11 @@ cc_interrupt: ;/* slave */
 	call	WDTExec
 	add	esp,16
 	jmp cc_interrupt_master
-	;.size	cc_interrupt, .-cc_interrupt
 	}
 }
 void __declspec(naked) cc_interrupt_master()
 {
 	_asm{
-cc_interrupt_master:
 	lea	ebp,[40+esp]
 	mov	eax,[-16+ebp] ;/* decilinecount */
 	mov	ebx,[-20+ebp] ;/* decilinecycles */
@@ -311,14 +305,12 @@ L_A7:
 	test ebp,31
 	jne	L_A6
 	jmp	L_A4
-	;.size	cc_interrupt_master, .-cc_interrupt_master
 	}
 }
 
 void __declspec(naked) dyna_linker()
 {
 	_asm{
-dyna_linker:
 	;/* eax = virtual target address */
 	;/* ebx = instruction to patch */
 	mov	ecx,eax
@@ -398,7 +390,6 @@ L_B8:
 	je	dyna_linker
 	;/* shouldn't happen */
 	int 3
-	;.size	dyna_linker, .-dyna_linker
 	}
 }
 
@@ -407,7 +398,6 @@ void __declspec(naked) jump_vaddr_eax_master()
 	_asm{
 	mov	edi,eax
 	jmp	jump_vaddr_edi_master
-	;.size	jump_vaddr_eax_master, .-jump_vaddr_eax_master
 	}
 }
 void __declspec(naked) jump_vaddr_ecx_master()
@@ -415,7 +405,6 @@ void __declspec(naked) jump_vaddr_ecx_master()
 	_asm{
 	mov	edi,ecx
 	jmp	jump_vaddr_edi_master
-	;.size	jump_vaddr_ecx_master, .-jump_vaddr_ecx_master
 	}
 }
 void __declspec(naked) jump_vaddr_edx_master()
@@ -423,7 +412,6 @@ void __declspec(naked) jump_vaddr_edx_master()
 	_asm{
 	mov	edi,edx
 	jmp	jump_vaddr_edi_master
-	;.size	jump_vaddr_edx_master, .-jump_vaddr_edx_master
 	}
 }
 void __declspec(naked) jump_vaddr_ebx_master()
@@ -431,7 +419,6 @@ void __declspec(naked) jump_vaddr_ebx_master()
 	_asm{
 	mov	edi,ebx
 	jmp	jump_vaddr_edi_master
-	;.size	jump_vaddr_ebx_master, .-jump_vaddr_ebx_master
 	}
 }
 void __declspec(naked) jump_vaddr_ebp_master()
@@ -439,7 +426,6 @@ void __declspec(naked) jump_vaddr_ebp_master()
 	_asm{
 	mov	edi,ebp
 	jmp	jump_vaddr_edi_master
-	;.size	jump_vaddr_ebp_master, .-jump_vaddr_ebp_master
 	}
 }
 void __declspec(naked) jump_vaddr_eax_slave()
@@ -447,7 +433,6 @@ void __declspec(naked) jump_vaddr_eax_slave()
 	_asm{
 	mov	edi,eax
 	jmp	jump_vaddr_edi_slave
-	;.size	jump_vaddr_eax_slave, .-jump_vaddr_eax_slave
 	}
 }
 void __declspec(naked) jump_vaddr_ecx_slave()
@@ -455,7 +440,6 @@ void __declspec(naked) jump_vaddr_ecx_slave()
 	_asm{
 	mov	edi,ecx
 	jmp	jump_vaddr_edi_slave
-	;.size	jump_vaddr_ecx_slave, .-jump_vaddr_ecx_slave
 	}
 }
 void __declspec(naked) jump_vaddr_edx_slave()
@@ -463,7 +447,6 @@ void __declspec(naked) jump_vaddr_edx_slave()
 	_asm{
 	mov	edi,edx
 	jmp	jump_vaddr_edi_slave
-	;.size	jump_vaddr_edx_slave, .-jump_vaddr_edx_slave
 	}
 }
 void __declspec(naked) jump_vaddr_ebx_slave()
@@ -471,7 +454,6 @@ void __declspec(naked) jump_vaddr_ebx_slave()
 	_asm{
 	mov	edi,ebx
 	jmp	jump_vaddr_edi_slave
-	;.size	jump_vaddr_ebx_slave, .-jump_vaddr_ebx_slave
 	}
 }
 void __declspec(naked) jump_vaddr_ebp_slave()
@@ -479,7 +461,6 @@ void __declspec(naked) jump_vaddr_ebp_slave()
 	_asm{
 	mov	edi,ebp
 	jmp jump_vaddr_edi_slave
-	;.size	jump_vaddr_ebp_slave, .-jump_vaddr_ebp_slave
 	}
 }
 void __declspec(naked)  jump_vaddr_edi_slave()
@@ -487,7 +468,6 @@ void __declspec(naked)  jump_vaddr_edi_slave()
 		_asm{
 	or	edi,1
 	jmp jump_vaddr_edi_master
-	;.size	jump_vaddr_edi_slave, .-jump_vaddr_edi_slave
 		}
 }
 void __declspec(naked)  jump_vaddr_edi_master()
@@ -495,7 +475,6 @@ void __declspec(naked)  jump_vaddr_edi_master()
 	_asm{
 	mov	eax,edi
 	jmp jump_vaddr
-	;.size	jump_vaddr_edi_master, .-jump_vaddr_edi_master
 	}
 }
 void __declspec(naked)  jump_vaddr()
@@ -520,14 +499,11 @@ L_C2:
 	call	get_addr
 	add	esp,4
 	jmp	eax
-	;.size	jump_vaddr, .-jump_vaddr
 	}
 }
 void __declspec(naked) verify_code()
 {
 	_asm{
-;global verify_code
-verify_code:
 	;/* eax = source */
 	;/* ebx = target */
 	;/* ecx = length */
@@ -561,10 +537,9 @@ L_D5:
 	call	get_addr
 	add	esp,4 ;/* pop virtual address */
 	jmp	eax
-	;.size	verify_code, .-verify_code
 	}
 }
-void __declspec(naked) WriteInvalidateLong()
+void __declspec(naked) WriteInvalidateLong(u32 addr, u32 val)
 {
 	_asm{
 	mov	ecx,eax
@@ -583,21 +558,16 @@ void __declspec(naked) WriteInvalidateLong()
 	;*FASTCLL
 	;jmp	MappedMemoryWriteLong
 write:
-	;push	edx
-	;push	ecx
 	push	edx
 	push	eax
 	call	MappedMemoryWriteLong
 	add	esp,8
 	ret
-	;.size	WriteInvalidateLong, .-WriteInvalidateLong
 	}
 }
-void __declspec(naked) WriteInvalidateWord()
+void __declspec(naked) WriteInvalidateWord(u32 addr, u32 val)
 {
 	_asm{
-;global WriteInvalidateWord
-WriteInvalidateWord:
 	mov	ecx,eax
 	shr	ecx,12
 	bt	[cached_code],ecx
@@ -614,29 +584,23 @@ WriteInvalidateWord:
 	;*FASTCLL
 	;jmp	MappedMemoryWriteWord
 write:
-	;push	edx
-	;push	ecx
 	push	edx
 	push	eax
 	call	MappedMemoryWriteWord
 	add	esp,8
 	ret
-	;.size	WriteInvalidateWord, .-WriteInvalidateWord
 	}
 }
-void __declspec(naked) WriteInvalidateByteSwapped()
+void __declspec(naked) WriteInvalidateByteSwapped(u32 addr, u32 val)
 {
 	_asm{
-WriteInvalidateByteSwapped:
 	xor	eax,1
 	jmp WriteInvalidateByte
-	;.size	WriteInvalidateByteSwapped, .-WriteInvalidateByteSwapped
 	}
 }
-void __declspec(naked) WriteInvalidateByte()
+void __declspec(naked) WriteInvalidateByte(u32 addr, u32 val)
 {
 	_asm{
-WriteInvalidateByte:
 	mov	ecx,eax
 	shr	ecx,12
 	bt	[cached_code],ecx
@@ -653,20 +617,16 @@ WriteInvalidateByte:
 	;FASTCLL
 	;jmp	MappedMemoryWriteByte
 write:
-	;push	edx
-	;push	ecx
 	push	edx
 	push	eax
 	call	MappedMemoryWriteByte
 	add	esp,8
 	ret
-	;.size	WriteInvalidateByte, .-WriteInvalidateByte
 	}
 }
 void __declspec(naked) div1()
 {
 	_asm{
-div1:
 	;/* eax = dividend */
 	;/* ecx = divisor */
 	;/* edx = sr */
@@ -725,13 +685,11 @@ div1_negative_divisor:
 	shl	ebx,8
 	or	edx,ebx ;/* save new Q */
 	ret
-	;.size	div1, .-div1
 	}
 }
 void __declspec(naked) macl()
 {
 	_asm{
-macl:
 	;/* ebx = sr */
 	;/* ebp = multiplicand address */
 	;/* edi = multiplicand address */
@@ -771,13 +729,11 @@ macl_saturation:
 	cmovg	edx,esi
 	cmovg	eax,ecx
 	ret
-	;.size	macl, .-macl
 	}
 }
 void __declspec(naked) macw()
 {
 	_asm{
-macw:
 	;/* ebx = sr */
 	;/* ebp = multiplicand address */
 	;/* edi = multiplicand address */
@@ -821,14 +777,12 @@ macw_saturation:
 	pop	edx
 	pop	edx
 	ret
-	;.size	macw, .-macw
 	}
 }
 
 void __declspec(naked) master_handle_bios()
 {
 	_asm{
-master_handle_bios:
 	mov	edx,[esp] ;/* get return address */
 	mov	[master_pc],eax
 	mov	[master_cc],esi
@@ -842,13 +796,11 @@ master_handle_bios:
 	mov	esi,master_cc
 	mov	[esp],edx
 	ret	;/* jmp *master_ip */
-	;.size	master_handle_bios, .-master_handle_bios
 	}
 }
 void __declspec(naked) slave_handle_bios()
 {
 	_asm{
-slave_handle_bios:
 	pop	edx ;/* get return address */
 	mov	[slave_pc],eax
 	mov	[slave_cc],esi
@@ -861,16 +813,13 @@ slave_handle_bios:
 	mov	edx,slave_ip
 	mov	esi,slave_cc
 	jmp	edx ;/* jmp *slave_ip */
-	;.size	slave_handle_bios, .-slave_handle_bios
 	}
 }
 void __declspec(naked) breakpoint()
 {
 	_asm{
-breakpoint:
 	ret
 	;/* Set breakpoint here for debugging */
-	;.size	breakpoint, .-breakpoint
 	}
 }
 

@@ -252,10 +252,22 @@ int tracedebug=0;
 
 //#define DEBUG_CYCLE_COUNT 1
 
-void nullf(const char *format, ...)
+void inv_debug(const char *format, ...)
 {
 extern int fps_counter;
-	if(fps_counter>9999)
+	//if(fps_counter>=7)
+	if(FALSE)
+	{
+		va_list args;
+		va_start(args,format);
+		vprintf(format,args);
+	}
+}
+void assem_debug(const char *format, ...)
+{
+extern int fps_counter;
+	//if(fps_counter>=7)
+	if(FALSE)
 	{
 		va_list args;
 		va_start(args,format);
@@ -264,8 +276,8 @@ extern int fps_counter;
 }
 //#define assem_debug printf
 //#define inv_debug printf
-#define assem_debug nullf
-#define inv_debug nullf
+//#define assem_debug nullf
+//#define inv_debug nullf
 
 int __msgbox(int a)
 {
@@ -300,9 +312,10 @@ void *get_addr(u32 vaddr)
   head=jump_dirty[page];
   while(head!=NULL) {
     if(head->vaddr==vaddr) {
-      //printf("TRACE: count=%d next=%d (get_addr match dirty %x: %x)\n",Count,next_interupt,vaddr,(int)head->addr);
+      //printf("TRACE: (get_addr match dirty %x: %x)\n",vaddr,(int)head->addr);
       // Don't restore blocks which are about to expire from the cache
-      if((((u32)head->addr-(u32)out)<<(32-TARGET_SIZE_2))>0x60000000+(MAX_OUTPUT_BLOCK_SIZE<<(32-TARGET_SIZE_2)))
+      //if((((u32)head->addr-(u32)out)<<(32-TARGET_SIZE_2))>0x60000000+(MAX_OUTPUT_BLOCK_SIZE<<(32-TARGET_SIZE_2)))
+	if((u32)head->addr>(u32)out)
       if(verify_dirty(head->addr)) {
         u32 start,end;
         int *ht_bin;

@@ -86,7 +86,7 @@ HANDLE thread1obj=0;
 HWND ghstatusbar=0;
 HMENU ghmenu=0;
 
-static int fps_counter=0;
+int fps_counter=0;
 static int thread_busy=0;
 static int pause_thread=0;
 extern unsigned char *dispbuffer;
@@ -319,6 +319,7 @@ LRESULT CALLBACK dialogproc(HWND hwnd,UINT msg,WPARAM wparam,LPARAM lparam)
 			char *s="C:\\EMU\\games\\RS\\023 Radiant Silvergun (J).cue";
 			if(!PathFileExists(s))
 				s="E:\\Saturn\\Games\\RadiantSilvergun\\023 Radiant Silvergun (J).cue";
+			//s="E:\\Saturn\\Games\\Nights\\ws-NiGHTS.cue";
 			init_conf(s);
 			init_audio();
 		}
