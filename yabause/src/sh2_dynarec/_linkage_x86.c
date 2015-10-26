@@ -539,7 +539,7 @@ L_D5:
 	jmp	eax
 	}
 }
-void __declspec(naked) WriteInvalidateLong(u32 addr, u32 val)
+void __declspec(naked) FASTCALL WriteInvalidateLong(u32 addr, u32 val)
 {
 	_asm{
 	mov	ecx,eax
@@ -565,7 +565,7 @@ write:
 	ret
 	}
 }
-void __declspec(naked) WriteInvalidateWord(u32 addr, u32 val)
+void __declspec(naked) FASTCALL WriteInvalidateWord(u32 addr, u32 val)
 {
 	_asm{
 	mov	ecx,eax
@@ -591,14 +591,14 @@ write:
 	ret
 	}
 }
-void __declspec(naked) WriteInvalidateByteSwapped(u32 addr, u32 val)
+void __declspec(naked) FASTCALL WriteInvalidateByteSwapped(u32 addr, u32 val)
 {
 	_asm{
 	xor	eax,1
 	jmp WriteInvalidateByte
 	}
 }
-void __declspec(naked) WriteInvalidateByte(u32 addr, u32 val)
+void __declspec(naked) FASTCALL WriteInvalidateByte(u32 addr, u32 val)
 {
 	_asm{
 	mov	ecx,eax
