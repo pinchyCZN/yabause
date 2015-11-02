@@ -120,6 +120,8 @@ void YabSetError(int type, const void *extra)
 
 void YabErrorMsg(const char * format, ...) {
     va_list l;
+	char buffer[512]={0};
+	/*
     int n;
     char * buffer;
 
@@ -128,13 +130,13 @@ void YabErrorMsg(const char * format, ...) {
     va_end(l);
 
     buffer = malloc(n + 1);
-
+*/
     va_start(l, format);
     vsprintf(buffer, format, l);
     va_end(l);
 
     YuiErrorMsg(buffer);
-    free(buffer);
+//    free(buffer);
 }
 
 //////////////////////////////////////////////////////////////////////////////

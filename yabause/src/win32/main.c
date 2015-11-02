@@ -203,7 +203,7 @@ int draw_fbuffer(HDC hdc,RECT *rect)
 	}
 	return 0;
 }
-int render_thread()
+int _cdecl render_thread()
 {
 	if(thread1obj==0)
 		return 0;
@@ -307,6 +307,65 @@ LRESULT CALLBACK debug_opt_dlg(HWND hwnd,UINT msg,WPARAM wparam,LPARAM lparam)
 	}
 	return 0;
 }
+int setupPixelFormat(HDC hDC)
+{
+    PIXELFORMATDESCRIPTOR pfd = {
+        sizeof(PIXELFORMATDESCRIPTOR),  /* size */
+        1,                              /* version */
+        PFD_SUPPORT_OPENGL |
+        PFD_DRAW_TO_WINDOW |
+        PFD_DOUBLEBUFFER,               /* support double-buffering */
+        PFD_TYPE_RGBA,                  /* color type */
+        32,                             /* prefered color depth */
+        0, 0, 0, 0, 0, 0,               /* color bits (ignored) */
+        0,                              /* no alpha buffer */
+        0,                              /* alpha bits (ignored) */
+        0,                              /* no accumulation buffer */
+        0, 0, 0, 0,                     /* accum bits (ignored) */
+        16,                             /* depth buffer */
+        0,                              /* no stencil buffer */
+        0,                              /* no auxiliary buffers */
+        PFD_MAIN_PLANE,                 /* main layer */
+        0,                              /* reserved */
+        0, 0, 0,                        /* no layer, visible, damage masks */
+    };
+    int pixelFormat;
+
+    pixelFormat = ChoosePixelFormat(hDC, &pfd);
+    if (pixelFormat == 0) {
+        MessageBox(WindowFromDC(hDC), "ChoosePixelFormat failed.", "Error",
+                MB_ICONERROR | MB_OK);
+        exit(1);
+    }
+
+    if (SetPixelFormat(hDC, pixelFormat, &pfd) != TRUE) {
+        MessageBox(WindowFromDC(hDC), "SetPixelFormat failed.", "Error",
+                MB_ICONERROR | MB_OK);
+        exit(1);
+    }
+	/*
+	PIXELFORMATDESCRIPTOR pfd;
+	memset(&pfd,0,sizeof(pfd));
+	pfd.cColorBits = pfd.cDepthBits = 32;
+	pfd.dwFlags    = PFD_SUPPORT_OPENGL | PFD_DOUBLEBUFFER;
+	SetPixelFormat(hDC,ChoosePixelFormat(hDC,&pfd),&pfd);
+	*/
+	return 0;
+}
+static HDC hDC=0;
+static HGLRC hGLRC;
+int init_ogl(HWND hwnd)
+{
+
+	hDC=GetDC(hwnd);
+	if(hDC)
+		setupPixelFormat(hDC);
+	hGLRC=wglCreateContext(hDC);
+	if(hGLRC){
+		wglMakeCurrent(hDC,hGLRC);
+	}
+	return 0;
+}
 LRESULT CALLBACK dialogproc(HWND hwnd,UINT msg,WPARAM wparam,LPARAM lparam)
 {
 	static int timer=0;
@@ -315,6 +374,7 @@ LRESULT CALLBACK dialogproc(HWND hwnd,UINT msg,WPARAM wparam,LPARAM lparam)
 	case WM_INITDIALOG:
 		open_console();
 		resize_console(120,500);
+		init_ogl(hwnd);
 		{
 			char *s="C:\\EMU\\games\\RS\\023 Radiant Silvergun (J).cue";
 			if(!PathFileExists(s))
@@ -323,7 +383,7 @@ LRESULT CALLBACK dialogproc(HWND hwnd,UINT msg,WPARAM wparam,LPARAM lparam)
 			init_conf(s);
 			init_audio();
 		}
-		timer=SetTimer(hwnd,1337,33,NULL);
+		timer=SetTimer(hwnd,1337,100,NULL);
 		LogStart();
 		{
 			RECT rect={0};
@@ -396,6 +456,9 @@ LRESULT CALLBACK dialogproc(HWND hwnd,UINT msg,WPARAM wparam,LPARAM lparam)
 		break;
 	case WM_PAINT:
 		{
+			if(hDC)
+				SwapBuffers(hDC);
+			/*
 			PAINTSTRUCT ps;
 			HDC hdc;
 			RECT rect={0};
@@ -408,6 +471,7 @@ LRESULT CALLBACK dialogproc(HWND hwnd,UINT msg,WPARAM wparam,LPARAM lparam)
 			hdc=BeginPaint(hwnd,&ps);
 			draw_fbuffer(hdc,&rect);
 			EndPaint(hwnd,&ps);
+			*/
 		}
 		break;
 	}

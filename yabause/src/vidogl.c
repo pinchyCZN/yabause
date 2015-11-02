@@ -3150,7 +3150,7 @@ static void Vdp2DrawNBG0(void)
       }
 
       info.rotatenum = 1;
-      info.PlaneAddr = (void FASTCALL (*)(void *, int))&Vdp2ParameterBPlaneAddr;
+      info.PlaneAddr = (void (FASTCALL *)(void *, int))&Vdp2ParameterBPlaneAddr;
       parameter.coefenab = Vdp2Regs->KTCTL & 0x100;
 
       info.LineColorBase = 0x00;
@@ -3213,7 +3213,7 @@ static void Vdp2DrawNBG0(void)
       else
          info.coordincy = (float) 65536 / (Vdp2Regs->ZMYN0.all & 0x7FF00);
       
-      info.PlaneAddr = (void FASTCALL (*)(void *, int))&Vdp2NBG0PlaneAddr;            
+      info.PlaneAddr = (void (FASTCALL *)(void *, int))&Vdp2NBG0PlaneAddr;            
    }
    else
       // Not enabled
@@ -3405,7 +3405,7 @@ static void Vdp2DrawNBG1(void)
       
       
    info.priority = (Vdp2Regs->PRINA >> 8) & 0x7;;
-   info.PlaneAddr = (void FASTCALL (*)(void *, int))&Vdp2NBG1PlaneAddr;
+   info.PlaneAddr = (void (FASTCALL *)(void *, int))&Vdp2NBG1PlaneAddr;
 
    if (!(info.enable & Vdp2External.disptoggle) || (info.priority == 0) ||
       (Vdp2Regs->BGON & 0x1 && (Vdp2Regs->CHCTLA & 0x70) >> 4 == 4)) // If NBG0 16M mode is enabled, don't draw
@@ -3524,7 +3524,7 @@ static void Vdp2DrawNBG2(void)
    info.coordincx = info.coordincy = 1;
 
    info.priority = Vdp2Regs->PRINB & 0x7;;
-   info.PlaneAddr = (void FASTCALL (*)(void *, int))&Vdp2NBG2PlaneAddr;
+   info.PlaneAddr = (void (FASTCALL *)(void *, int))&Vdp2NBG2PlaneAddr;
 
    if (!(info.enable & Vdp2External.disptoggle) || (info.priority == 0) ||
       (Vdp2Regs->BGON & 0x1 && (Vdp2Regs->CHCTLA & 0x70) >> 4 >= 2)) // If NBG0 2048/32786/16M mode is enabled, don't draw
@@ -3595,7 +3595,7 @@ static void Vdp2DrawNBG3(void)
    info.coordincx = info.coordincy = 1;
 
    info.priority = (Vdp2Regs->PRINB >> 8) & 0x7;
-   info.PlaneAddr = (void FASTCALL (*)(void *, int))&Vdp2NBG3PlaneAddr;
+   info.PlaneAddr = (void (FASTCALL *)(void *, int))&Vdp2NBG3PlaneAddr;
 
    if (!(info.enable & Vdp2External.disptoggle) || (info.priority == 0) ||
       (Vdp2Regs->BGON & 0x1 && (Vdp2Regs->CHCTLA & 0x70) >> 4 == 4) || // If NBG0 16M mode is enabled, don't draw
@@ -3657,8 +3657,8 @@ static void Vdp2DrawRBG0(void)
    
    Vdp2ReadRotationTable(0, &paraA);
    Vdp2ReadRotationTable(1, &paraB);
-   paraA.PlaneAddr = (void FASTCALL (*)(void *, int))&Vdp2ParameterAPlaneAddr;
-   paraB.PlaneAddr = (void FASTCALL (*)(void *, int))&Vdp2ParameterBPlaneAddr;
+   paraA.PlaneAddr = (void (FASTCALL *)(void *, int))&Vdp2ParameterAPlaneAddr;
+   paraB.PlaneAddr = (void (FASTCALL *)(void *, int))&Vdp2ParameterBPlaneAddr;
    paraA.charaddr = (Vdp2Regs->MPOFR & 0x7) * 0x20000;
    paraB.charaddr = (Vdp2Regs->MPOFR & 0x70) * 0x2000;
    ReadPlaneSizeR(&paraA,Vdp2Regs->PLSZ >> 8);
@@ -3772,12 +3772,12 @@ static void Vdp2DrawRBG0(void)
       case 0:
          // Parameter A
          info.rotatenum = 0;
-         info.PlaneAddr = (void FASTCALL (*)(void *, int))&Vdp2ParameterAPlaneAddr;
+         info.PlaneAddr = (void (FASTCALL *)(void *, int))&Vdp2ParameterAPlaneAddr;
          break;
       case 1:
          // Parameter B
          info.rotatenum = 1;
-         info.PlaneAddr = (void FASTCALL (*)(void *, int))&Vdp2ParameterBPlaneAddr;
+         info.PlaneAddr = (void (FASTCALL *)(void *, int))&Vdp2ParameterBPlaneAddr;
          break;
       case 2:
          // Parameter A+B switched via coefficients
@@ -3788,7 +3788,7 @@ static void Vdp2DrawRBG0(void)
          // FIX ME(need to figure out which Parameter is being used)
          VDP2LOG("Rotation Parameter Mode %d not supported!\n", Vdp2Regs->RPMD & 0x3);
          info.rotatenum = 0;
-         info.PlaneAddr = (void FASTCALL (*)(void *, int))&Vdp2ParameterAPlaneAddr;
+         info.PlaneAddr = (void (FASTCALL *)(void *, int))&Vdp2ParameterAPlaneAddr;
          break;
    }
 

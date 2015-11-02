@@ -18,11 +18,13 @@ unsigned long _byteswap_ulong(unsigned long value)
 #include "..\scsp.h"
 #include "..\vdp1.h"
 #include "..\vidsoft.h"
+#include "..\vidogl.h"
 #include "..\cs0.h"
 #include "..\debug.h"
 #include "SNDVisual.h"
 
 extern CDInterface ISOCD;
+extern SoundInterface_struct SNDVisual;
 
 M68K_struct * M68KCoreList[] = {
 &M68KDummy,
@@ -92,6 +94,7 @@ void YuiSwapBuffers()
 }
 int YuiErrorMsg(char *str)
 {
+	printf("ERROR MSG:%s\n",str);
 	return 0;
 }
 
@@ -169,8 +172,9 @@ int init_conf(char *cdpath)
 	mYabauseConf.m68kcoretype = M68KCORE_C68K;
 	mYabauseConf.percoretype = get_percore_win32id();
 	mYabauseConf.sh2coretype = SH2CORE_DEFAULT;
-	mYabauseConf.sh2coretype = SH2CORE_DYNAREC;
+	//mYabauseConf.sh2coretype = SH2CORE_DYNAREC;
 	mYabauseConf.vidcoretype = VIDCORE_SOFT;
+	mYabauseConf.vidcoretype = VIDCORE_OGL;
 	mYabauseConf.sndcoretype = SNDCORE_VISUAL; //SNDCORE_DUMMY;
 	mYabauseConf.cdcoretype = CDCORE_ISO;
 	mYabauseConf.carttype = CART_NONE;

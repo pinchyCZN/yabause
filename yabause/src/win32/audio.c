@@ -2,6 +2,8 @@
 #define _WIN32_WINNT 0x500
 #include <windows.h>
 #include <mmsystem.h>
+#include "..\scsp.h"
+#include "SNDVisual.h"
 
 #if defined(_WIN64)
  typedef unsigned __int64 DWORD_PTR;
@@ -55,7 +57,7 @@ int init_audio()
 	return hwave!=0;
 }
 
-int clamp_sample(int samp)
+INLINE int clamp_sample(int samp)
 {
 	samp>>=1;
 	//samp<<=1;
@@ -161,3 +163,61 @@ int test_audio()
 	}
 	return 0;
 }
+
+
+
+
+int SNDVisualInit(void)
+{
+   return 0;
+}
+
+void SNDVisualDeInit(void)
+{
+}
+
+int SNDVisualReset(void)
+{
+   return 0;
+}
+
+int SNDVisualChangeVideoFormat(int vertfreq)
+{
+   return 0;
+}
+
+void SNDVisualUpdateAudio(unsigned long *leftchanbuffer, unsigned long *rightchanbuffer, unsigned long num_samples)
+{
+	//store_audio(leftchanbuffer,rightchanbuffer,num_samples);
+}
+
+unsigned long SNDVisualGetAudioSpace(void)
+{
+	return 44100/10;
+}
+
+void SNDVisualMuteAudio(void)
+{
+}
+
+void SNDVisualUnMuteAudio(void)
+{
+}
+
+void SNDVisualSetVolume(int volume)
+{
+}
+
+SoundInterface_struct SNDVisual = {
+SNDCORE_VISUAL,
+"Visual Sound Interface",
+SNDVisualInit,
+SNDVisualDeInit,
+SNDVisualReset,
+SNDVisualChangeVideoFormat,
+SNDVisualUpdateAudio,
+SNDVisualGetAudioSpace,
+SNDVisualMuteAudio,
+SNDVisualUnMuteAudio,
+SNDVisualSetVolume
+};
