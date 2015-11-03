@@ -91,6 +91,7 @@ NULL
 
 void YuiSwapBuffers()
 {
+	ogl_swap_buffers();
 }
 int YuiErrorMsg(char *str)
 {

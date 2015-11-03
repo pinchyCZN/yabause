@@ -262,6 +262,12 @@ int init_ogl(HWND hwnd)
 	}
 	return 0;
 }
+int ogl_swap_buffers()
+{
+	if(hDC)
+		SwapBuffers(hDC);
+	return 0;
+}
 int _cdecl render_thread(void *param)
 {
 	HWND hwnd=param;
@@ -403,6 +409,7 @@ LRESULT CALLBACK dialogproc(HWND hwnd,UINT msg,WPARAM wparam,LPARAM lparam)
 			move_console(0,rect.bottom,1200,600);
 		}
 		SetEvent(thread1obj);
+		/*
 		ghstatusbar=CreateStatusWindow(WS_CHILD|WS_VISIBLE,"",hwnd,IDC_STATUS);
 		{
 			RECT rect;
@@ -411,6 +418,7 @@ LRESULT CALLBACK dialogproc(HWND hwnd,UINT msg,WPARAM wparam,LPARAM lparam)
 			}
 		}
 		create_status_bar_parts(hwnd,ghstatusbar);
+		*/
 		ghmenu=LoadMenu(ghinstance,MAKEINTRESOURCE(IDR_MENU1));
 		if(ghmenu)
 			SetMenu(hwnd,ghmenu);
@@ -468,8 +476,8 @@ LRESULT CALLBACK dialogproc(HWND hwnd,UINT msg,WPARAM wparam,LPARAM lparam)
 		break;
 	case WM_PAINT:
 		{
-			if(hDC)
-				SwapBuffers(hDC);
+//			if(hDC)
+//				SwapBuffers(hDC);
 			/*
 			PAINTSTRUCT ps;
 			HDC hdc;
