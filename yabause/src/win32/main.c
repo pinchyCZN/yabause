@@ -86,7 +86,7 @@ HANDLE thread1obj=0;
 HWND ghstatusbar=0;
 HMENU ghmenu=0;
 
-int fps_counter=0;
+static unsigned __int64 fps[10]={0};
 static int thread_busy=0;
 static int pause_thread=0;
 extern unsigned char *dispbuffer;
@@ -194,7 +194,7 @@ int draw_fbuffer(HDC hdc,RECT *rect)
 			RECT rect={0};
 			char str[20];
 			int len;
-			_snprintf(str,sizeof(str),"%i",fps_counter);
+//			_snprintf(str,sizeof(str),"%i",fps_counter);
 			len=strlen(str);
 			rect.right=100;
 			rect.bottom=100;
@@ -271,7 +271,7 @@ int ogl_swap_buffers()
 int _cdecl render_thread(void *param)
 {
 	HWND hwnd=param;
-
+	int fps_index=0;
 	if(thread1obj==0)
 		return 0;
 	init_ogl(hwnd);
@@ -282,6 +282,12 @@ int _cdecl render_thread(void *param)
 		//s="E:\\Saturn\\Games\\Nights\\ws-NiGHTS.cue";
 		init_conf(s);
 		init_audio();
+		{
+			char path[MAX_PATH]={0};
+			get_appdata_folder(path,sizeof(path));
+			YabLoadStateSlot(path,0);
+		}
+
 	}
 
 	while(TRUE){
@@ -292,7 +298,9 @@ int _cdecl render_thread(void *param)
 			while(TRUE){
 				thread_busy=1;
 				tick_emu();
-				fps_counter++;
+				QueryPerformanceCounter(&fps[fps_index++]);
+				if(fps_index>=sizeof(fps)/sizeof(__int64))
+					fps_index=0;
 				if(pause_thread)
 					break;
 			}
@@ -389,10 +397,12 @@ LRESULT CALLBACK dialogproc(HWND hwnd,UINT msg,WPARAM wparam,LPARAM lparam)
 {
 	static int timer=0;
 	static int status_height=50;
+	static __int64 freq=0;
 	switch(msg){
 	case WM_INITDIALOG:
 		open_console();
-		resize_console(120,500);
+		resize_console(120,100);
+		QueryPerformanceFrequency(&freq);
 
 		thread1obj=CreateEvent(NULL,FALSE,FALSE,"THREAD1");
 		if(thread1obj){
@@ -470,8 +480,27 @@ LRESULT CALLBACK dialogproc(HWND hwnd,UINT msg,WPARAM wparam,LPARAM lparam)
 	case WM_TIMER:
 		{
 			//InvalidateRect(GetDlgItem(hwnd,IDC_FBUFFER),NULL,0);
-			InvalidateRect(hwnd,NULL,0);
+			//InvalidateRect(hwnd,NULL,0);
 			PERWin32HandleEvents();
+			{
+				int i,count=0;
+				__int64 delta=0;
+				for(i=0;i<sizeof(fps)/sizeof(__int64);i+=2){
+					if(fps[i]!=0 && fps[i+1]>=fps[i]){
+						delta+=fps[i+1]-fps[i];
+						count++;
+					}
+				}
+				if(count>0 && freq>0){
+					double d,f;
+					d=delta;
+					d/=count;
+					f=freq;
+					d=d/f;
+					d=1/d;
+					printf("FPS %.1f\n",d);
+				}
+			}
 		}
 		break;
 	case WM_PAINT:

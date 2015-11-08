@@ -34,6 +34,7 @@
 #include <ws2tcpip.h>
 
 #ifndef	_GNU_H_WINDOWS32_SOCKETS
+#if (_MSC_VER<=1200)
 	typedef struct addrinfo {
 	  int             ai_flags;
 	  int             ai_family;
@@ -44,6 +45,7 @@
 	  struct sockaddr  *ai_addr;
 	  struct addrinfo  *ai_next;
 	} ADDRINFOA, *PADDRINFOA;
+#endif
 #endif
 
 static fd_set read_fds;

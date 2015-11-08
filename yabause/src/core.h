@@ -44,7 +44,8 @@
 #	ifdef __MINGW32__
 #		define FASTCALL __attribute__((fastcall))
 #	elif defined (__i386__)
-#		if defined(_WIN32) && (_MSC_VER<=1200)
+#		if defined(_WIN32)
+// && (_MSC_VER<=1200)
 //#			define FASTCALL	
 #			define FASTCALL __fastcall
 #		else

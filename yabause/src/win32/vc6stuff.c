@@ -1,3 +1,4 @@
+#if (_MSC_VER<=1200)
 #define CHAR_BIT 8
 unsigned short _byteswap_ushort(unsigned short value) 
 { 
@@ -8,7 +9,7 @@ unsigned long _byteswap_ulong(unsigned long value)
     return _byteswap_ushort((unsigned short)value) << (2 * CHAR_BIT) | 
            _byteswap_ushort((unsigned short)(value >> (2 * CHAR_BIT))); 
 } 
-
+#endif
 #include "..\m68kcore.h"
 #include "..\cdbase.h"
 #include "..\sh2core.h"
@@ -105,6 +106,7 @@ int YuiErrorMsg(char *str)
 #include <Shlobj.h>
 
 #ifndef	_GNU_H_WINDOWS32_SOCKETS
+#if (_MSC_VER<=1200)
 	typedef struct addrinfo {
 	  int             ai_flags;
 	  int             ai_family;
@@ -116,12 +118,13 @@ int YuiErrorMsg(char *str)
 	  struct addrinfo  *ai_next;
 	} ADDRINFOA, *PADDRINFOA;
 #endif
+#endif
 
 typedef int  (WSAAPI * getaddrinfo_ptr_t)  (const char *, const char* , const struct addrinfo *, struct addrinfo **);
 typedef void (WSAAPI * freeaddrinfo_ptr_t) (struct addrinfo*);
 getaddrinfo_ptr_t getaddrinfo_ptr;
 freeaddrinfo_ptr_t freeaddrinfo_ptr;
-
+#if (_MSC_VER<=1200)
 void freeaddrinfo(struct addrinfo *a)
 {
 	freeaddrinfo_ptr(a);
@@ -130,6 +133,7 @@ int getaddrinfo(const char *a, const char*b , const struct addrinfo *c, struct a
 {
 	return getaddrinfo_ptr(a,b,c,d);
 }
+#endif
 int vc6_load_freeaddrinfo()
 {
 	static HMODULE hsock=0;
@@ -145,7 +149,9 @@ int vc6_load_freeaddrinfo()
 int get_appdata_folder(char *path,int size)
 {
 #define APP_NAME "yabause"
+#ifndef CSIDL_LOCAL_APPDATA
 #define CSIDL_LOCAL_APPDATA 28
+#endif
 	int found=FALSE;
 	ITEMIDLIST *pidl;
 	IMalloc	*palloc;

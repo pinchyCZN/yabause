@@ -188,7 +188,7 @@ int SNDVisualChangeVideoFormat(int vertfreq)
 
 void SNDVisualUpdateAudio(unsigned long *leftchanbuffer, unsigned long *rightchanbuffer, unsigned long num_samples)
 {
-	//store_audio(leftchanbuffer,rightchanbuffer,num_samples);
+	store_audio(leftchanbuffer,rightchanbuffer,num_samples);
 }
 
 unsigned long SNDVisualGetAudioSpace(void)
