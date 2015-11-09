@@ -81,7 +81,8 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:windows /debug /machine:I386 /pdbtype:sept
-# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib Ws2_32.lib comctl32.lib Shlwapi.lib winmm.lib OPENGL32.LIB /nologo /subsystem:windows /profile /debug /machine:I386
+# ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib Ws2_32.lib comctl32.lib Shlwapi.lib winmm.lib OPENGL32.LIB /nologo /subsystem:windows /debug /machine:I386
+# SUBTRACT LINK32 /profile
 
 !ENDIF 
 
@@ -313,6 +314,18 @@ SOURCE=..\sh2idle.c
 # Begin Source File
 
 SOURCE=..\sh2int.c
+
+!IF  "$(CFG)" == "yabauseVC6 - Win32 Release"
+
+# ADD CPP /FAs
+
+!ELSEIF  "$(CFG)" == "yabauseVC6 - Win32 Debug"
+
+# ADD CPP /ZI
+# SUBTRACT CPP /FA<none>
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 

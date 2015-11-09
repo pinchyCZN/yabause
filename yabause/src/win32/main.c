@@ -285,7 +285,7 @@ int _cdecl render_thread(void *param)
 		{
 			char path[MAX_PATH]={0};
 			get_appdata_folder(path,sizeof(path));
-			YabLoadStateSlot(path,0);
+			//YabLoadStateSlot(path,0);
 		}
 
 	}

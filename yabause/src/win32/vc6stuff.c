@@ -195,6 +195,7 @@ int init_conf(char *cdpath)
 
 	mYabauseConf.cdpath=cdpath;
 	YabauseInit(&mYabauseConf);
+	//ScspSetFrameAccurate(1);
 	return 0;
 }
 
